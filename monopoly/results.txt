@@ -1,0 +1,17 @@
+Rounds selected: name
+Rounds played: 5
+Difficulty selected: normal
+Number of dice used: 1
+Number of players: 4
+Player name: Hat
+Player money: œ-322
+
+Player name: Train
+Player money: œ10
+
+Player name: Terrier
+Player money: œ857
+
+Player name: Crown
+Player money: œ-107
+

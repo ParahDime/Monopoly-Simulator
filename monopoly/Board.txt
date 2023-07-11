@@ -1,0 +1,40 @@
+4 Go
+1 Old Kent Road 60 2 Brown
+8 Community Chest
+1 Whitechapel Road 60 4 Brown
+10 Income Tax 200
+3 Kings Cross Station 200 25
+1 The Angel Islington 100 6 Light Blue
+7 Chance
+1 Euston Road 100 6 Light Blue
+1 Pentonville Road 120 8 Light Blue
+5 Jail
+1 Pall Mall 140 10 Pink
+2 Electric Company 150
+1 Whitehall 140 10 Pink
+1 Northumberland Avenue 160 12 Pink
+3 Marylebone Station 200 25
+1 Bow Street 180 14 Orange
+8 Community Chest
+1 Marlborough Street 180 14 Orange
+1 Vine Street 200 16 Orange
+9 Free Parking
+1 Strand 220 18 Red
+7 Chance
+1 Fleet Street 220 18 Red
+1 Trafalgar Square 240 20 Red
+3 Fenchurch St. Station 200 25
+1 Leicester Square 260 22 Yellow
+1 Coventry Street 260 22 Yellow
+2 Water Works 150
+1 Piccadilly 280 24 Yellow
+6 Go To Jail
+1 Regent Street 300 26 Green
+1 Oxford Street 300 26 Green
+8 Community Chest
+1 Bond Street 320 28 Green
+3 Liverpool St. Station 200 25
+7 Chance
+1 Park Lane 350 35 Dark Blue
+10 Super Tax 100
+1 Mayfair 400 50 Dark Blue

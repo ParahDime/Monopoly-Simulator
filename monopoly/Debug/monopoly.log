@@ -1,0 +1,33 @@
+﻿  CChance.cpp
+  CChest.cpp
+  CFreeParking.cpp
+  CGo.cpp
+  CGoToJail.cpp
+  CJail.cpp
+  CProperty.cpp
+C:\Users\Dec\Downloads\monopoly\monopoly\CProperty.cpp(84,25): warning C4244: '=': conversion from 'double' to '_Ty', possible loss of data
+          with
+          [
+              _Ty=int
+          ]
+C:\Users\Dec\Downloads\monopoly\monopoly\CProperty.cpp(115,25): warning C4244: '=': conversion from 'double' to '_Ty', possible loss of data
+          with
+          [
+              _Ty=int
+          ]
+C:\Users\Dec\Downloads\monopoly\monopoly\CProperty.cpp(209,39): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+  CStation.cpp
+  CTax.cpp
+  CTile.cpp
+  CTileSort.cpp
+  CUtility.cpp
+  Source.cpp
+C:\Users\Dec\Downloads\monopoly\monopoly\Source.cpp(229,21): warning C4018: '<': signed/unsigned mismatch
+C:\Users\Dec\Downloads\monopoly\monopoly\Source.cpp(259,20): warning C4018: '<': signed/unsigned mismatch
+C:\Users\Dec\Downloads\monopoly\monopoly\Source.cpp(330,19): warning C4018: '>=': signed/unsigned mismatch
+C:\Users\Dec\Downloads\monopoly\monopoly\Source.cpp(403,21): warning C4018: '<': signed/unsigned mismatch
+C:\Users\Dec\Downloads\monopoly\monopoly\Source.cpp(768,35): warning C4018: '>=': signed/unsigned mismatch
+C:\Users\Dec\Downloads\monopoly\monopoly\Source.cpp(818,24): warning C4018: '<': signed/unsigned mismatch
+C:\Users\Dec\Downloads\monopoly\monopoly\Source.cpp(948,12): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+  Generating Code...
+  monopoly.vcxproj -> C:\Users\Dec\Downloads\monopoly\Debug\monopoly.exe
