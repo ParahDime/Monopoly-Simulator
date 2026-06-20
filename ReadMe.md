@@ -1,12 +1,12 @@
-READ ME
+# Customised monopoly gameplay
 
-Customised monopoly gameplay
+### OVERVIEW: 
 
-OVERVIEW:
-A design twist on monopoly that I created after making a watered down version of monopoly but wanted something a bit more interesting. 
-It allows you to build your own custom monopoly board using the tools available (the .txt files)
+<p>A design twist on monopoly that I created after making a watered down version of monopoly but wanted something a bit more interesting. 
+It allows you to build your own custom monopoly board using the tools available (the .txt files)</p>
 
-CUSTOMISATION (IN GAME):
+### CUSTOMISATION (IN GAME):
+
 The game allows you to customise the experience of the game for your player (Player 1). Certain aspects of the game can be modified to make it more interesting for you. These include:
 	Rounds:
 		You can modify the number of rounds played in a game. Currently it is set so that there is a MINIMUM of 1 round played, and a MAXIMUM of 1000 rounds played at current.
@@ -23,7 +23,7 @@ The game allows you to customise the experience of the game for your player (Pla
 		Modifies the number of dice used. This can either be 1 die, or 2 dice
 		(note that adding 2 dice will mean that the double rule is added into the game, including triple rolling of doubles rule)
 
-READING THE FILES:
+### READING THE FILES:
 The program reads in files to get information that allows the game to be played. Below is a guide to help you customise the file
 
 names.txt
@@ -100,7 +100,7 @@ Community Chest.txt
 	Type 7: All player collection
 		Inputted as Type, Name, Amount
 
-WRITING YOUR OWN BOARD
+### WRITING YOUR OWN BOARD
 Writing your own board is possible, and uses the above list to write your own files. Below are examples based on the file
 
 board.txt
