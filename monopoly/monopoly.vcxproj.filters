@@ -169,7 +169,7 @@
     <Text Include="names.txt">
       <Filter>Resource Files</Filter>
     </Text>
-    <Text Include="ReadMe.txt">
+    <Text Include="ReadMe.md">
       <Filter>Resource Files</Filter>
     </Text>
     <Text Include="chance.txt">

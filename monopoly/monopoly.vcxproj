@@ -196,7 +196,7 @@
     <Text Include="community chest.txt" />
     <Text Include="edits.txt" />
     <Text Include="names.txt" />
-    <Text Include="ReadMe.txt" />
+    <Text Include="ReadMe.md" />
   </ItemGroup>
   <ItemGroup>
     <None Include=".gitignore" />
