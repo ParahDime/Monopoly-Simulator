@@ -213,7 +213,7 @@ void GameEnd(unique_ptr<CGame>& cGame, vector<CPlayer*>& aPlayers)
 	{
 		//open file
 		unique_ptr<string> fileName = make_unique<string>();
-		*fileName = "results.txt";
+		*fileName = "config/results.txt";
 		ofstream file(*fileName);
 
 		//dump stats into the file
@@ -962,7 +962,7 @@ int main()
 
 	//read in files
 	
-	*fileName = "names.txt";
+	*fileName = "config/names.txt";
 	ifstream nameFile(*fileName);
 	if (CheckFile(nameFile, fileName))
 	{
@@ -975,7 +975,7 @@ int main()
 	}
 	nameFile.close();
 
-	*fileName = "board.txt";
+	*fileName = "config/board.txt";
 	ifstream tileFile(*fileName);
 	if (CheckFile(tileFile, fileName))
 	{
@@ -990,7 +990,7 @@ int main()
 
 	//load in chance tiles
 
-	*fileName = "chance.txt";
+	*fileName = "config/chance.txt";
 	ifstream chanceFile(*fileName);
 	if (CheckFile(chanceFile, fileName))
 	{
@@ -1005,7 +1005,7 @@ int main()
 
 	//load in community chest tiles
 
-	*fileName = "community chest.txt";
+	*fileName = "config/community chest.txt";
 	ifstream chestFile(*fileName);
 	if (CheckFile(chestFile, fileName))
 	{

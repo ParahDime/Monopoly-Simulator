@@ -1,0 +1,16 @@
+1 Bank pays you dividend of 50
+3 Advance to Go, and collect your salary 0 2
+3 Advance to Trafalgar Square. If you pass Go, collect your salary 1 Trafalgar Square
+3 Advance to Mayfair 1 Mayfair
+3 Advance to Pall Mall. If you pass Go, collect your salary 3 Pall Mall
+3 Advance to the nearest Station. If unowned, you may buy it from the Bank. If owned, pay the owner twice the rental 0 3
+3 Advance to nearest Utility. If unowned, you may buy it from the Bank. If owned, throw dice and pay owner a total ten times amount thrown. 0 2
+1 Bank pays you dividend of 50
+6 Make general repairs on all your property. 25 100
+4 Get Out of Jail Free
+5 Go to Jail. Go directly to Jail, do not pass Go, do not collect your salary
+2 Speeding fine 15
+3 Take a trip to Kings Cross Station. If you pass Go, collect your salary 1 Kings Cross Station
+2 You have been elected Chairman of the Board. Pay each player 50
+1 Your building loan matures. Collect 150
+6 Make general repairs on all your property. 25 100
