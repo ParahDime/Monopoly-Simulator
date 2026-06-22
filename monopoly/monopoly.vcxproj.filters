@@ -15,176 +15,157 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="CTile.h">
+    <ClInclude Include="src\CGame.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="CTileSort.h">
+    <ClInclude Include="src\CPlayer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Header.h">
+    <ClInclude Include="src\Header.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="CPlayer.h">
+    <ClInclude Include="src\Card\CCard.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="CGame.h">
+    <ClInclude Include="src\Card\CCardCollection.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="CGo.h">
+    <ClInclude Include="src\Card\CCardEarn.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="CFreeParking.h">
+    <ClInclude Include="src\Card\CCardJail.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="CJail.h">
+    <ClInclude Include="src\Card\CCardLose.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="CTax.h">
+    <ClInclude Include="src\Card\CCardMove.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="CGoToJail.h">
+    <ClInclude Include="src\Card\CCardOutofJail.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="CUtility.h">
+    <ClInclude Include="src\Card\CCardRepair.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="CStation.h">
+    <ClInclude Include="src\Card\CCardSort.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="CChance.h">
+    <ClInclude Include="src\Board\CFreeParking.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="CChest.h">
+    <ClInclude Include="src\Board\CGo.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="CProperty.h">
+    <ClInclude Include="src\Board\CGoToJail.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="CCardSort.h">
+    <ClInclude Include="src\Board\CJail.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="CCard.h">
+    <ClInclude Include="src\Board\CProperty.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="CCardEarn.h">
+    <ClInclude Include="src\Board\CStation.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="CCardLose.h">
+    <ClInclude Include="src\Board\CTax.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="CCardMove.h">
+    <ClInclude Include="src\Board\CUtility.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="CCardOutofJail.h">
+    <ClInclude Include="src\Board\CTile.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="CCardJail.h">
+    <ClInclude Include="src\Board\CTileSort.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="CCardRepair.h">
+    <ClInclude Include="src\Board\CChance.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="CCardCollection.h">
+    <ClInclude Include="src\Board\CChest.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="CTile.cpp">
+    <ClCompile Include="src\CGame.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="CTileSort.cpp">
+    <ClCompile Include="src\CPlayer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Card\CCard.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Card\CCardCollection.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Card\CCardEarn.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Card\CCardJail.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Card\CCardLose.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Card\CCardMove.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Card\CCardOutofJail.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Card\CCardRepair.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Card\CCardSort.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Board\CFreeParking.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Board\CGo.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Board\CGoToJail.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Board\CJail.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Board\CProperty.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Board\CStation.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Board\CTax.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Board\CUtility.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Source.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="CPlayer.cpp">
+    <ClCompile Include="src\Board\CTile.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="CGame.cpp">
+    <ClCompile Include="src\Board\CTileSort.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="CGo.cpp">
+    <ClCompile Include="src\Board\CChance.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="CFreeParking.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="CJail.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="CTax.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="CGoToJail.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="CUtility.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="CStation.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="CChance.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="CChest.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="CProperty.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="CCardSort.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="CCard.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="CCardEarn.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="CCardLose.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="CCardMove.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="CCardOutofJail.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="CCardJail.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="CCardRepair.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="CCardCollection.cpp">
+    <ClCompile Include="src\Board\CChest.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <Text Include="Board.txt">
-      <Filter>Resource Files</Filter>
-    </Text>
-    <Text Include="names.txt">
-      <Filter>Resource Files</Filter>
-    </Text>
-    <Text Include="ReadMe.md">
-      <Filter>Resource Files</Filter>
-    </Text>
-    <Text Include="chance.txt">
-      <Filter>Resource Files</Filter>
-    </Text>
-    <Text Include="community chest.txt">
-      <Filter>Resource Files</Filter>
-    </Text>
-    <Text Include="edits.txt">
-      <Filter>Resource Files</Filter>
-    </Text>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include=".gitignore">
-      <Filter>Resource Files</Filter>
-    </None>
+    <Text Include="config\Board.txt" />
+    <Text Include="config\Chance.txt" />
+    <Text Include="config\Community chest.txt" />
+    <Text Include="config\Names.txt" />
   </ItemGroup>
 </Project>

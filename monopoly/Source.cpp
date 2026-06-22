@@ -1,10 +1,10 @@
-#include "Header.h"
-#include "CPlayer.h"
-#include "CGame.h"
-#include "CTile.h"
-#include "CTileSort.h"
-#include "CCardSort.h"
-#include "CCard.h"
+#include "src/Header.h"
+#include "src/CPlayer.h"
+#include "src/CGame.h"
+#include "src/Board/CTile.h"
+#include "src/Board/CTileSort.h"
+#include "src/Card/CCardSort.h"
+#include "src/Card/CCard.h"
 
 void Test()
 {
