@@ -194,6 +194,7 @@
     <ClCompile Include="src\CPlayer.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <Text Include="..\todo.txt" />
     <Text Include="config\Board.txt" />
     <Text Include="config\Chance.txt" />
     <Text Include="config\Community chest.txt" />

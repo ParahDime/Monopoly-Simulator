@@ -2,6 +2,7 @@
 bin/
 obj/
 x64/
+debug/
  
 # Visual Studio files
 .vs/
@@ -9,3 +10,6 @@ x64/
 *.suo
 *.userosscache
 *.sln.docstates
+
+# Other files
+todo.txt

@@ -167,5 +167,8 @@
     <Text Include="config\Chance.txt" />
     <Text Include="config\Community chest.txt" />
     <Text Include="config\Names.txt" />
+    <Text Include="..\todo.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
   </ItemGroup>
 </Project>

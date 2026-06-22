@@ -15,6 +15,7 @@ private:
 
 	int mMaxTiles; //the maximum amount of tiles that are on the board that can be bought
 	int mTileOwned; //the amount of tiles owned by players
+	bool mPlaying = false;
 public:
 	CGame();
 	~CGame();
