@@ -1,6 +1,7 @@
 # Build output
 bin/
 obj/
+x64/
  
 # Visual Studio files
 .vs/
