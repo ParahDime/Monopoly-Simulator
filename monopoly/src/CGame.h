@@ -8,7 +8,6 @@ private:
 	int mCurrentRound;
 	int mMaxRound;
 	int mPlayers; //no of players
-	int mLow; //low roll
 	int mHigh; //high roll
 	int mDiceNo; //number of dice rolled
 	int mMultiplier; //difficulty used, higher the number, more difficult
@@ -36,6 +35,7 @@ public:
 
 	int GetLowRoll();
 	int GetHighRoll();
+	void SetHighRoll(int diceFace);
 
 	int GetDiceNo();
 	void SetDiceNo(int diceNo);

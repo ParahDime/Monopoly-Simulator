@@ -11,7 +11,7 @@ public:
     CCardMove(istream& file);
     ~CCardMove();
 
-    void GetText();
+    void GetText(unique_ptr<Logger>& ioLog);
     void SetSpecific(bool tSpecific);
     bool GetSpecific();
 

@@ -9,6 +9,6 @@ public:
     CCardJail(istream& file);
     ~CCardJail();
 
-    void GetText();
+    void GetText(unique_ptr<Logger>& ioLog);
 };
 

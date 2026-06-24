@@ -3,7 +3,6 @@
 CGame::CGame()
 {
     mBank = 40000;
-    mLow = 1;
     mHigh = 6;
     mCurrentRound = 0;
     mTileOwned = 0;
@@ -112,15 +111,14 @@ void CGame::MaxTileCount()
 {
     mMaxTiles++;
 }
-
-int CGame::GetLowRoll()
-{
-    return mLow;
-}
-
 int CGame::GetHighRoll()
 {
     return mHigh;
+}
+
+void CGame::SetHighRoll(int diceFace)
+{
+    mHigh = diceFace;
 }
 
 void CGame::BankTotalGain(int money)

@@ -9,9 +9,9 @@ CCardEarn::~CCardEarn()
 {
 }
 
-void CCardEarn::GetText()
+void CCardEarn::GetText(unique_ptr<Logger>& ioLog)
 {
-	cout << mName << " " << mMoney << "\n";
+	ioLog->writeToFile(mName + " " + to_string(mMoney) + "\n");
 }
 
 void CCardEarn::SetMoney(int tMoney)

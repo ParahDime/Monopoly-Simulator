@@ -29,9 +29,9 @@ int CCardRepair::GetHotelCost()
 	return mHotelRepair;
 }
 
-void CCardRepair::GetText()
+void CCardRepair::GetText(unique_ptr<Logger>& ioLog)
 {
-	cout << mName << " Pay " << mHouseRepair << " for each house and " << mHotelRepair << " for each hotel.\n";
+	ioLog->writeToFile(mName + " Pay " + to_string(mHouseRepair) + " for each house and " + to_string(mHotelRepair) + " for each hotel.\n");
 }
 
 istream& operator>>(istream& inputStream, CCardRepair& cCardRepair)

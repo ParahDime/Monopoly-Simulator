@@ -9,7 +9,7 @@ CFreeParking::~CFreeParking()
 {
 }
 
-void CFreeParking::OutputText(vector<CPlayer*>& aPlayers, int position)
+void CFreeParking::OutputText(vector<CPlayer*>& aPlayers, int position, unique_ptr<Logger>& ioLog)
 {
-	cout << aPlayers[position]->GetName() << "is resting.\n";
+	ioLog->writeToFile(aPlayers[position]->GetName() + "is resting.\n");
 }

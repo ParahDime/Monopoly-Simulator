@@ -12,7 +12,7 @@ public:
     void SetMoney(int tMoney);
     int GetMoney();
 
-    void GetText();
+    void GetText(unique_ptr<Logger>& ioLog);
 
     friend istream& operator >> (istream& inputStream, CCardLose& cCardLose);
 };

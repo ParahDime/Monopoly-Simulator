@@ -21,9 +21,9 @@ int CCardLose::GetMoney()
 	return mMoney;
 }
 
-void CCardLose::GetText()
+void CCardLose::GetText(unique_ptr<Logger>& ioLog)
 {
-	cout << mName << " " << mMoney << "\n";
+	ioLog->writeToFile(mName + " " + to_string(mMoney) + "\n");
 }
 
 

@@ -11,9 +11,9 @@ CUtility::~CUtility()
 {
 }
 
-void CUtility::BuyProperty(unique_ptr<CGame>& cGame, vector<CPlayer*>& aPlayers, int& position)
+void CUtility::BuyProperty(unique_ptr<CGame>& cGame, vector<CPlayer*>& aPlayers, int& position, unique_ptr<Logger>& ioLog)
 {
-	cout << aPlayers[position]->GetName() << " buys " << mName << " for " << char(156) << mPrice << "\n";
+	ioLog->writeToFile(aPlayers[position]->GetName() + " buys " + mName + " for " + char(156) + to_string(mPrice) + "\n");
 
 	mOwner = position;
 
@@ -46,7 +46,7 @@ int CUtility::GetOwner()
 	return mOwner;
 }
 
-void CUtility::PayBill(unique_ptr<CGame>& cGame, vector<CTile*>& aBoard, vector<CPlayer*>& aPlayers, int& position, unique_ptr<int>& pDieRoll, unique_ptr<int>& pTypeOwned)
+void CUtility::PayBill(unique_ptr<CGame>& cGame, vector<CTile*>& aBoard, vector<CPlayer*>& aPlayers, int& position, unique_ptr<int>& pDieRoll, unique_ptr<int>& pTypeOwned, unique_ptr<Logger>& ioLog)
 {
 	//take the value of the role
 	*pDieRoll = (*pDieRoll * *pTypeOwned) * 4;
@@ -57,7 +57,7 @@ void CUtility::PayBill(unique_ptr<CGame>& cGame, vector<CTile*>& aBoard, vector<
 		*pDieRoll *= cGame->GetMultiplier();
 	}
 
-	cout << aPlayers[position]->GetName() << " pays " << char(156) << *pDieRoll << " to " << aPlayers[mOwner]->GetName() << "\n";
+	ioLog->writeToFile(aPlayers[position]->GetName() + " pays " + char(156) + to_string(*pDieRoll) + " to " + aPlayers[mOwner]->GetName() + "\n");
 	//pay money
 	aPlayers[position]->TakeMoney(*pDieRoll, cGame);
 	aPlayers[mOwner]->TakeMoney(*pDieRoll, cGame);

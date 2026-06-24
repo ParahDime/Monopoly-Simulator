@@ -9,7 +9,7 @@ CCardOutofJail::~CCardOutofJail()
 {
 }
 
-void CCardOutofJail::GetText()
+void CCardOutofJail::GetText(unique_ptr<Logger>& ioLog)
 {
-	cout << mName << "\n";
+	ioLog->writeToFile(mName + "\n");
 }

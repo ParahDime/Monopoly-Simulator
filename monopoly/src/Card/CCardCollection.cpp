@@ -11,9 +11,9 @@ CCardCollection::~CCardCollection()
 {
 }
 
-void CCardCollection::GetText()
+void CCardCollection::GetText(unique_ptr<Logger>& ioLog)
 {
-	cout << mName << " " << mAmount;
+	 ioLog->writeToFile(mName + " " + to_string(mAmount));
 }
 
 istream& operator>>(istream& inputStream, CCardCollection& cCardCollection)

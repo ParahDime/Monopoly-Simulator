@@ -12,6 +12,6 @@ public:
     CCardOutofJail(istream& file);
     ~CCardOutofJail();
 
-    void GetText();
+    void GetText(unique_ptr<Logger>& ioLog);
 };
 

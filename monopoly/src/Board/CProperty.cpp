@@ -75,7 +75,7 @@ int CProperty::GetHouses()
 	return mHouses;
 }
 
-void CProperty::SetHouses(vector<CPlayer*>& aPlayers, unique_ptr<CGame>& cGame, int& position)
+void CProperty::SetHouses(vector<CPlayer*>& aPlayers, unique_ptr<CGame>& cGame, int& position, unique_ptr<Logger>& ioLog)
 {
 	//if no hotel and less houses than max
 	if (mHotel != 1 && mHouses < 4)
@@ -88,15 +88,15 @@ void CProperty::SetHouses(vector<CPlayer*>& aPlayers, unique_ptr<CGame>& cGame, 
 			aPlayers[position]->TakeMoney(*pHousePrice, cGame);
 			mHouses++;
 			UpdateRent();
-			cout << aPlayers[position]->GetName() << " has added a house to " << mName << "\n";
+			ioLog->writeToFile(aPlayers[position]->GetName() + " has added a house to " + mName + "\n");
 		}
 		else { //if player doesn't have enough money
-			cout << aPlayers[position]->GetName() << " does not have enough money to add to their property\n";
+			ioLog->writeToFile(aPlayers[position]->GetName() + " does not have enough money to add to their property\n");
 		}
 	}
 	else //if Hotel is 1, houses is equal to 4
 	{
-		SetHotels(aPlayers, cGame, position); //pass it to hotels
+		SetHotels(aPlayers, cGame, position, ioLog); //pass it to hotels
 	}
 }
 
@@ -105,7 +105,7 @@ int CProperty::GetHotels()
 	return mHotel;
 }
 
-void CProperty::SetHotels(vector<CPlayer*>& aPlayers, unique_ptr<CGame>& cGame, int& position)
+void CProperty::SetHotels(vector<CPlayer*>& aPlayers, unique_ptr<CGame>& cGame, int& position, unique_ptr<Logger>& ioLog)
 {
 	if (mHouses == 4 && mHotel == 0) //if max houses and no hotel
 	{
@@ -123,17 +123,17 @@ void CProperty::SetHotels(vector<CPlayer*>& aPlayers, unique_ptr<CGame>& cGame, 
 		}
 		else
 		{
-			cout << aPlayers[position]->GetName() << " does not have enough to add to their property\n";
+			ioLog->writeToFile(aPlayers[position]->GetName() + " does not have enough to add to their property\n");
 		}
 
 	}
 	else if (mHotel == 1) //if hotel
 	{
-		cout << aPlayers[position]->GetName() << " cannot add to their property\n";
+		ioLog->writeToFile(aPlayers[position]->GetName() + " cannot add to their property\n");
 	}
 	else //hotel already added 
 	{
-		cout << aPlayers[position]->GetName() << " cannot add to their property\n";
+		ioLog->writeToFile(aPlayers[position]->GetName() + " cannot add to their property\n");
 	}
 }
 
@@ -147,9 +147,9 @@ void CProperty::ResetTile()
 
 }
 
-void CProperty::BuyProperty(unique_ptr<CGame>& cGame, vector<CPlayer*>& aPlayers, int& position)
+void CProperty::BuyProperty(unique_ptr<CGame>& cGame, vector<CPlayer*>& aPlayers, int& position, unique_ptr<Logger>& ioLog)
 {
-	cout << aPlayers[position]->GetName() << " buys " << mName << " for " << char(156) << mPrice << "\n";
+	ioLog->writeToFile(aPlayers[position]->GetName() + " buys " + mName + " for " + char(156) + to_string(mPrice) + "\n");
 
 	mOwner = position;
 
@@ -158,7 +158,7 @@ void CProperty::BuyProperty(unique_ptr<CGame>& cGame, vector<CPlayer*>& aPlayers
 	//bank gains money
 }
 
-void CProperty::PayRent(unique_ptr<CGame>& cGame, vector<CPlayer*>& aPlayers, int position)
+void CProperty::PayRent(unique_ptr<CGame>& cGame, vector<CPlayer*>& aPlayers, int position, unique_ptr<Logger>& ioLog)
 {
 	//totalRent is equal to the rent set x a multipler
 	unique_ptr<int> mTotalRent = make_unique<int>();
@@ -179,7 +179,7 @@ void CProperty::PayRent(unique_ptr<CGame>& cGame, vector<CPlayer*>& aPlayers, in
 	}
 
 
-	cout << aPlayers[position]->GetName() << " paid " << char(156) << *mTotalRent << " to " << aPlayers[mOwner]->GetName() << "\n";
+	ioLog->writeToFile(aPlayers[position]->GetName() + " paid " + char(156) + to_string(*mTotalRent) + " to " + aPlayers[mOwner]->GetName() + "\n");
 }
 
 

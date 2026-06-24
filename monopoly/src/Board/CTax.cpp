@@ -11,9 +11,9 @@ CTax::~CTax()
 
 }
 
-void CTax::PayTax(unique_ptr<CGame>& cGame, vector<CPlayer*>& aPlayers, int position)
+void CTax::PayTax(unique_ptr<CGame>& cGame, vector<CPlayer*>& aPlayers, int position, unique_ptr<Logger>& ioLog)
 {
-	cout << aPlayers[position]->GetName() << " pays " << char(156) << mPrice << " in tax.\n";
+	ioLog->writeToFile(aPlayers[position]->GetName() + " pays " + char(156) + to_string(mPrice) + " in tax.\n");
 	//lose money
 	aPlayers[position]->TakeMoney(mPrice, cGame);
 	//bank gains money

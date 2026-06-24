@@ -31,12 +31,12 @@ void CTile::ResetTile()
 {
 }
 
-void CTile::OutputText(vector<CPlayer*>& aPlayers, int position)
+void CTile::OutputText(vector<CPlayer*>& aPlayers, int position, unique_ptr<Logger>& ioLog)
 {
 	//cout << "Player has landed on a tile. Do nothing for one turn\n";
 }
 
-void CTile::PayTax(unique_ptr<CGame>& cGame, vector<CPlayer*>& aPlayers, int position)
+void CTile::PayTax(unique_ptr<CGame>& cGame, vector<CPlayer*>& aPlayers, int position, unique_ptr<Logger>& ioLog)
 {
 }
 
@@ -45,20 +45,20 @@ void PayRent(unique_ptr<CGame>& cGame, vector<CPlayer*>& aPlayers, int position)
 
 }
 
-void CTile::BuyProperty(unique_ptr<CGame>& cGame, vector<CPlayer*>& aPlayers, int& position)
+void CTile::BuyProperty(unique_ptr<CGame>& cGame, vector<CPlayer*>& aPlayers, int& position, unique_ptr<Logger>& ioLog)
 {
 	//cout << "Tile cannot be bought\n";
 }
 
-void CTile::PayBill(unique_ptr<CGame>& cGame, vector<CTile*>& aBoard, vector<CPlayer*>& aPlayers, int& position, unique_ptr<int>& pDieRoll, unique_ptr<int>& pTypeOwned)
+void CTile::PayBill(unique_ptr<CGame>& cGame, vector<CTile*>& aBoard, vector<CPlayer*>& aPlayers, int& position, unique_ptr<int>& pDieRoll, unique_ptr<int>& pTypeOwned, unique_ptr<Logger>& ioLog)
 {
 }
 
-void CTile::PayRent(unique_ptr<CGame>& cGame, vector<CPlayer*>& aPlayers, int position)
+void CTile::PayRent(unique_ptr<CGame>& cGame, vector<CPlayer*>& aPlayers, int position, unique_ptr<Logger>& ioLog)
 {
 }
 
-void CTile::PayFare(unique_ptr<CGame>& cGame, vector<CTile*>& aBoard, vector<CPlayer*>& aPlayers, int& position, unique_ptr<int>& pTypeOwned)
+void CTile::PayFare(unique_ptr<CGame>& cGame, vector<CTile*>& aBoard, vector<CPlayer*>& aPlayers, int& position, unique_ptr<int>& pTypeOwned, unique_ptr<Logger>& ioLog)
 {
 }
 
@@ -98,7 +98,7 @@ void CTile::SetRent(int& tRent)
 {
 }
 
-void CTile::SetHouses(vector<CPlayer*>& aPlayers, unique_ptr<CGame>& cGame, int& position)
+void CTile::SetHouses(vector<CPlayer*>& aPlayers, unique_ptr<CGame>& cGame, int& position, unique_ptr<Logger>& ioLog)
 {
 }
 
@@ -107,7 +107,7 @@ int CTile::GetHotels()
 	return 0;
 }
 
-void CTile::SetHotels(vector<CPlayer*>& aPlayers, unique_ptr<CGame>& cGame, int& position)
+void CTile::SetHotels(vector<CPlayer*>& aPlayers, unique_ptr<CGame>& cGame, int& position, unique_ptr<Logger>& ioLog)
 {
 }
 
@@ -124,15 +124,15 @@ void CTile::MortgageTile(unique_ptr<CGame>& cGame, vector<CPlayer*>& aPlayers, i
 {
 }
 
-void CTile::PayMortgageTile(unique_ptr<CGame>& cGame, vector<CPlayer*>& aPlayers, int& position)
+void CTile::PayMortgageTile(unique_ptr<CGame>& cGame, vector<CPlayer*>& aPlayers, int& position, unique_ptr<Logger>& ioLog)
 {
 }
 
-void CTile::PassingJail(vector<CPlayer*>& aPlayers, int position)
+void CTile::PassingJail(vector<CPlayer*>& aPlayers, int position, unique_ptr<Logger>& ioLog)
 {
 }
 
-void CTile::GoToJail(unique_ptr<CGame>& cGame, vector<CTile*>& aBoard, vector<CPlayer*>& aPlayers, int& position)
+void CTile::GoToJail(unique_ptr<CGame>& cGame, vector<CTile*>& aBoard, vector<CPlayer*>& aPlayers, int& position, unique_ptr<Logger>& ioLog)
 {
 }
 

@@ -11,9 +11,9 @@ CStation::~CStation()
 {
 }
 
-void CStation::BuyProperty(unique_ptr<CGame>& cGame, vector<CPlayer*>& aPlayers, int& position)
+void CStation::BuyProperty(unique_ptr<CGame>& cGame, vector<CPlayer*>& aPlayers, int& position, unique_ptr<Logger>& ioLog)
 {
-	cout << aPlayers[position]->GetName() << " buys " << mName << " for " << char(156) << mPrice << "\n";
+	ioLog->writeToFile(aPlayers[position]->GetName() + " buys " + mName + " for " + char(156) + to_string(mPrice) + "\n");
 
 	mOwner = position;
 
@@ -24,7 +24,7 @@ void CStation::BuyProperty(unique_ptr<CGame>& cGame, vector<CPlayer*>& aPlayers,
 
 }
 
-void CStation::PayFare(unique_ptr<CGame>& cGame, vector<CTile*>& aBoard, vector<CPlayer*>& aPlayers, int& position, unique_ptr<int>& pTypeOwned)
+void CStation::PayFare(unique_ptr<CGame>& cGame, vector<CTile*>& aBoard, vector<CPlayer*>& aPlayers, int& position, unique_ptr<int>& pTypeOwned, unique_ptr<Logger>& ioLog)
 {
 	//calculate total
 	unique_ptr<int> mTotalRent = make_unique<int>();
@@ -36,7 +36,7 @@ void CStation::PayFare(unique_ptr<CGame>& cGame, vector<CTile*>& aBoard, vector<
 		*mTotalRent *= cGame->GetMultiplier();
 	}
 
-	cout << aPlayers[position]->GetName() << " pays " << char(156) << *mTotalRent << " to " << aPlayers[mOwner]->GetName() << "\n";
+	ioLog->writeToFile(aPlayers[position]->GetName() + " pays " + char(156) + to_string(*mTotalRent) + " to " + aPlayers[mOwner]->GetName() + "\n");
 	//pay money
 	aPlayers[position]->TakeMoney(*mTotalRent, cGame);
 	aPlayers[mOwner]->TakeMoney(*mTotalRent, cGame);

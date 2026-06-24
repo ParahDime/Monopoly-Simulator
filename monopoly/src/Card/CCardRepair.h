@@ -14,7 +14,7 @@ public:
     int GetHouseCost();
     void SetHotelCost(int& tHotel);
     int GetHotelCost();
-    void GetText();
+    void GetText(unique_ptr<Logger>& ioLog);
     friend istream& operator >> (istream& inputStream, CCardRepair& cCardRepair);
 };
 

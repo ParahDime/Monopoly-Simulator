@@ -46,7 +46,7 @@ char ReturnChar()
 
 //check if user is happy with the customisation options
 //bool used to show it changes are still needed (then set to true)
-bool VerifyCustomisation(unique_ptr<CGame>& cGame)
+bool VerifyCustomisation(unique_ptr<CGame>& cGame, unique_ptr<Logger>& ioLog)
 {
 	cout << "Max number of rounds: " << cGame->GetMaxRound() << "\n";
 	cout << "Difficulty: " << cGame->GetDifficulty() << "\n";
@@ -64,7 +64,7 @@ bool VerifyCustomisation(unique_ptr<CGame>& cGame)
 	else
 	{
 		//return
-		cout << "Customisation options set\n\n";
+		ioLog->writeToFile("Customisation options set\n\n");
 		return false;
 	}
 }
@@ -72,7 +72,7 @@ bool VerifyCustomisation(unique_ptr<CGame>& cGame)
 
 
 //use options to check what to change
-void CreateCustomisation(unique_ptr<CGame>& cGame)
+void CreateCustomisation(unique_ptr<CGame>& cGame, unique_ptr<Logger>& ioLog)
 {
 	unique_ptr<int> getInt = make_unique<int>();
 
@@ -113,15 +113,41 @@ void CreateCustomisation(unique_ptr<CGame>& cGame)
 
 	cout << "Enter number of players:\n min: 2\n max: 6\n";
 	*getInt = ReturnInt(2, 6);
-	cout << "Number of players set to " << *getInt << "\n\n";
+	cout << "Number of players set to " << *getInt << ".\n\n";
 
 	cGame->SetPlayers(*getInt);
 
 	//no of dice / sides of dice
+
+	//define dice side here
+	int dice[6] = { 1, 2, 3, 4, 5, 6 };
+	cout << "Select a sided die\n";
+	for (const auto& die : dice) {
+		std::cout << die << "\t";
+	}
+
+	int playerInput = -1;
+	bool matchFound = false;
+
+	while (!matchFound) {
+		std::cin >> playerInput;
+		for (const auto& face : dice) {
+			if (playerInput == face) {
+				matchFound = true;
+				break;
+			}
+		}
+		if (!matchFound) {
+			std::cout << "Invalid choice\n";
+		}
+	}
+
+	cout << playerInput << "sided die picked\n";
+
 	cout << "Would you like to use 2 dice?\n y / n\n";
 	if (ReturnChar() == 'y')
 	{
-		cout << "Set number of dice to 2\n\n";
+		cout << "Set number of dice to 2.\n\n";
 		cGame->SetDiceNo(2);
 		//set it to have 2 dice rolls
 	}
@@ -133,9 +159,9 @@ void CreateCustomisation(unique_ptr<CGame>& cGame)
 	}
 
 	//check if the user is happy with their customisation
-	if (VerifyCustomisation(cGame) == true)
+	if (VerifyCustomisation(cGame, ioLog) == true)
 	{
-		CreateCustomisation(cGame);
+		CreateCustomisation(cGame, ioLog);
 	}
 	else
 	{
@@ -182,32 +208,32 @@ int RNG(int low, int high)
 }
 
 //output each player's total
-void OutputPlayers(unique_ptr<CGame>& cGame, vector<CPlayer*>& aPlayers, bool gameEnd)
+void OutputPlayers(unique_ptr<CGame>& cGame, vector<CPlayer*>& aPlayers, unique_ptr<Logger>& ioLog, bool gameEnd)
 {
 	unique_ptr<int> pPlayerNo = make_unique<int>(0);
 
 	if (gameEnd)
 	{
-		cout << "Rounds played: " << cGame->GetCurrentRound() << "\n\n";
+		ioLog->writeToFile("Rounds played: " + to_string(cGame->GetCurrentRound()) + "\n\n");
 	}
 	else {
-		cout << "End of round " << cGame->GetCurrentRound() << "\n\n";
+		ioLog->writeToFile("End of round " + to_string(cGame->GetCurrentRound()) + "\n\n");
 	}
 
 	for (auto i = aPlayers.begin(); i != aPlayers.end(); i++)
 	{
 		//output their name and money
-		cout << aPlayers[*pPlayerNo]->GetName() << " has " << char(156) << aPlayers[*pPlayerNo]->GetMoney();
+		ioLog->writeToFile(aPlayers[*pPlayerNo]->GetName() + " has " + char(156) + to_string(aPlayers[*pPlayerNo]->GetMoney()));
 		if (!gameEnd)
 		{
-			cout << "Current position: " << aPlayers[*pPlayerNo]->GetPosition() << "\n";
+			ioLog->writeToFile("Current position: " +to_string(aPlayers[*pPlayerNo]->GetPosition()) + "\n");
 		}
 		//position
 		if (aPlayers[*pPlayerNo]->IsBankrupt())
 		{
-			cout << " declared BANKRUPT";
+			ioLog->writeToFile(" declared BANKRUPT");
 		}
-		cout << "\n";
+		ioLog->writeToFile("\n");
 
 		//show which player wins
 
@@ -218,12 +244,12 @@ void OutputPlayers(unique_ptr<CGame>& cGame, vector<CPlayer*>& aPlayers, bool ga
 
 
 //shows which player has won
-void GameEnd(unique_ptr<CGame>& cGame, vector<CPlayer*>& aPlayers)
+void GameEnd(unique_ptr<CGame>& cGame, vector<CPlayer*>& aPlayers, unique_ptr<Logger>& ioLog)
 {
 	//for loop
 	std::sort(aPlayers.begin(), aPlayers.end());
 
-	OutputPlayers(cGame, aPlayers, true);
+	OutputPlayers(cGame, aPlayers, ioLog, true);
 	
 	cout << "Would you like to print game results?\n y / n\n";
 
@@ -266,7 +292,7 @@ void GameEnd(unique_ptr<CGame>& cGame, vector<CPlayer*>& aPlayers)
 
 //calculates and deals with build repair cards
 void BuildRepairs(vector<CPlayer*>& aPlayers, vector<CCard*>& aCards, vector<CTile*>& aBoard, unique_ptr<CGame>& cGame, 
-	unique_ptr<int>& pCard, int position)
+	unique_ptr<int>& pCard, int position, unique_ptr<Logger>& ioLog)
 {
 	int* pHouses = new int;
 	int* pHotels = new int;
@@ -299,7 +325,7 @@ void BuildRepairs(vector<CPlayer*>& aPlayers, vector<CCard*>& aCards, vector<CTi
 
 	
 	//finalise cost of repairs
-	cout << aPlayers[position]->GetName() << "pays repairs for " << *pHouses << " houses and " << *pHotels << " hotels.\n";
+	ioLog->writeToFile(aPlayers[position]->GetName() + "pays repairs for " + to_string(*pHouses) + " houses and " + to_string(*pHotels) + " hotels.\n");
 	*pHouses = *pHouses * aCards[*pCard]->GetHouseCost();
 	*pHotels = *pHotels * aCards[*pCard]->GetHotelCost();
 
@@ -315,7 +341,7 @@ void BuildRepairs(vector<CPlayer*>& aPlayers, vector<CCard*>& aCards, vector<CTi
 
 //moves the player based on the card
 void MoveResolve(vector<CCard*>& aCards, vector<CPlayer*>& aPlayers, vector<CTile*>& aBoard, unique_ptr<CGame>& cGame,
-	unique_ptr<int>& pCard, int position)
+	unique_ptr<int>& pCard, int position, unique_ptr<Logger>& ioLog)
 {
 
 	unique_ptr<int> pPosition = make_unique<int>();
@@ -357,19 +383,19 @@ void MoveResolve(vector<CCard*>& aCards, vector<CPlayer*>& aPlayers, vector<CTil
 
 	//use player landing again to handle landing (if 1 2 or 3)
 	if (aBoard[*pPosition]->GetType() <= 3) {
-		cout << aPlayers[position]->GetName() << " moved to " << aBoard[*pPosition]->GetName() << "\n";
+		ioLog->writeToFile(aPlayers[position]->GetName() + " moved to " + aBoard[*pPosition]->GetName() + "\n");
 	}
 }
 
 
 //resolves a chance or community chest card
-void ResolveCard(vector<CCard*>& aCards, vector<CPlayer*>& aPlayers, vector<CTile*>& aBoard, unique_ptr<CGame>& cGame, int position)
+void ResolveCard(vector<CCard*>& aCards, vector<CPlayer*>& aPlayers, vector<CTile*>& aBoard, unique_ptr<CGame>& cGame, int position, unique_ptr<Logger>& ioLog)
 {
 
 	unique_ptr<int> pCard = make_unique<int>();
 	*pCard = RNG(1, aCards.size() - 1);
 
-	aCards[*pCard]->GetText();
+	aCards[*pCard]->GetText(ioLog);
 
 	
 	//find the type of the chance card with the RNG function
@@ -385,7 +411,7 @@ void ResolveCard(vector<CCard*>& aCards, vector<CPlayer*>& aPlayers, vector<CTil
 		break;
 	case 3:
 		//player moves to a position
-		MoveResolve(aCards, aPlayers, aBoard, cGame, pCard, position);
+		MoveResolve(aCards, aPlayers, aBoard, cGame, pCard, position, ioLog);
 		break;
 	case 4:
 		//player gets a 'get out of jail free card
@@ -393,7 +419,7 @@ void ResolveCard(vector<CCard*>& aCards, vector<CPlayer*>& aPlayers, vector<CTil
 		//if player has card, stay's the same
 		if (aPlayers[position]->getJailCard() == true)
 		{
-			cout << aPlayers[position]->GetName() << " already has a get out of jail card.\n";
+			ioLog->writeToFile(aPlayers[position]->GetName() + " already has a get out of jail card.\n");
 		}
 		else
 		{
@@ -403,11 +429,11 @@ void ResolveCard(vector<CCard*>& aCards, vector<CPlayer*>& aPlayers, vector<CTil
 		break;
 	case 5:
 		//player goes to jail
-		aBoard[aPlayers[position]->GetPosition()]->GoToJail(cGame, aBoard, aPlayers, position);
+		aBoard[aPlayers[position]->GetPosition()]->GoToJail(cGame, aBoard, aPlayers, position, ioLog);
 		break;
 	case 6:
 		//move to function
-		BuildRepairs(aPlayers, aCards, aBoard, cGame, pCard, position);
+		BuildRepairs(aPlayers, aCards, aBoard, cGame, pCard, position, ioLog);
 		break;
 	case 7:
 		//player collects money from other players
@@ -438,19 +464,17 @@ void ResolveCard(vector<CCard*>& aCards, vector<CPlayer*>& aPlayers, vector<CTil
 
 //handles where the player lands on the board
 void playerLanding(unique_ptr<CGame>& cGame, vector<CTile*>& aBoard, vector<CPlayer*>& aPlayers, int position, unique_ptr<int>& pDieRoll,
-	vector<CCard*>& aChance, vector<CCard*>& aCommunityChest)
+	vector<CCard*>& aChance, vector<CCard*>& aCommunityChest, unique_ptr<Logger>& ioLog)
 {
 	//player lands on X square
-	cout << aPlayers[position]->GetName();
 	if (aPlayers[position]->GetJailCounter() == 0)
 	{
-		cout << " lands on ";
+		ioLog->writeToFile(aPlayers[position]->GetName() + " lands on " + aBoard[aPlayers[position]->GetPosition()]->GetName());
 	}
 	else
 	{
-		cout << " is in ";
+		ioLog->writeToFile(aPlayers[position]->GetName() + " is in " + aBoard[aPlayers[position]->GetPosition()]->GetName());
 	}
-	cout << aBoard[aPlayers[position]->GetPosition()]->GetName() << "\n";
 	
 
 	
@@ -465,7 +489,7 @@ void playerLanding(unique_ptr<CGame>& cGame, vector<CTile*>& aBoard, vector<CPla
 		{
 			if (aPlayers[position]->GetMoney() >= aBoard[aPlayers[position]->GetPosition()]->GetPrice())
 			{
-				aBoard[aPlayers[position]->GetPosition()]->BuyProperty(cGame, aPlayers, position);
+				aBoard[aPlayers[position]->GetPosition()]->BuyProperty(cGame, aPlayers, position, ioLog);
 				cout << aBoard[aPlayers[position]->GetPosition()]->GetOwner();
 				//buy property
 			}
@@ -491,7 +515,7 @@ void playerLanding(unique_ptr<CGame>& cGame, vector<CTile*>& aBoard, vector<CPla
 					//if type = utility and owner of that tile also owns this tile
 				}
 
-				aBoard[aPlayers[position]->GetPosition()]->PayRent(cGame, aPlayers, position);
+				aBoard[aPlayers[position]->GetPosition()]->PayRent(cGame, aPlayers, position, ioLog);
 
 		}
 		//else if it is owned by the player
@@ -505,7 +529,7 @@ void playerLanding(unique_ptr<CGame>& cGame, vector<CTile*>& aBoard, vector<CPla
 			if ((aBoard[aPlayers[position]->GetPosition()]->IsMortgaged())
 				&& (aPlayers[position]->GetMoney() >= aBoard[aPlayers[position]->GetPosition()]->GetPrice() * 1.1))
 			{
-				aBoard[aPlayers[position]->GetPosition()]->PayMortgageTile(cGame, aPlayers, position);
+				aBoard[aPlayers[position]->GetPosition()]->PayMortgageTile(cGame, aPlayers, position, ioLog);
 			}
 
 			*allTrue = true;
@@ -533,18 +557,18 @@ void playerLanding(unique_ptr<CGame>& cGame, vector<CTile*>& aBoard, vector<CPla
 					&& aBoard[aPlayers[position]->GetPosition()]->GetHotels() < 1)
 				{
 					//check if player can afford to place a house
-					aBoard[aPlayers[position]->GetPosition()]->SetHouses(aPlayers, cGame, position);
+					aBoard[aPlayers[position]->GetPosition()]->SetHouses(aPlayers, cGame, position, ioLog);
 				}
 				//else if no of houses is equal to 4
 				else if (aBoard[aPlayers[position]->GetPosition()]->GetHouses() >= 4)
 				{
 					//check if player can afford to place a hotel down
-					aBoard[aPlayers[position]->GetPosition()]->SetHotels(aPlayers, cGame, position);
+					aBoard[aPlayers[position]->GetPosition()]->SetHotels(aPlayers, cGame, position, ioLog);
 				}
 				//else if a hotel is already on the property
 				else if (aBoard[aPlayers[position]->GetPosition()]->GetHotels() >= 1)
 				{
-					cout << "Maximum amount of buildings placed on " << aBoard[aPlayers[position]->GetPosition()]->GetName() << "\n";
+					ioLog->writeToFile("Maximum amount of buildings placed on " + aBoard[aPlayers[position]->GetPosition()]->GetName() + "\n");
 				}
 				else
 				{
@@ -564,7 +588,7 @@ void playerLanding(unique_ptr<CGame>& cGame, vector<CTile*>& aBoard, vector<CPla
 		//player lands on utility
 		if (aBoard[aPlayers[position]->GetPosition()]->GetOwner() == -1) //if it has no owner of the tile
 		{
-			aBoard[aPlayers[position]->GetPosition()]->BuyProperty(cGame, aPlayers, position);
+			aBoard[aPlayers[position]->GetPosition()]->BuyProperty(cGame, aPlayers, position, ioLog);
 			//buy property
 		}
 		//if property is not owned by the player
@@ -582,7 +606,7 @@ void playerLanding(unique_ptr<CGame>& cGame, vector<CTile*>& aBoard, vector<CPla
 				}
 			}
 
-			aBoard[aPlayers[position]->GetPosition()]->PayBill(cGame, aBoard, aPlayers, position, pDieRoll, pUtilityOwned);
+			aBoard[aPlayers[position]->GetPosition()]->PayBill(cGame, aBoard, aPlayers, position, pDieRoll, pUtilityOwned, ioLog);
 		}
 		//else if not enough money to pay OR owned by the player
 		else
@@ -595,7 +619,7 @@ void playerLanding(unique_ptr<CGame>& cGame, vector<CTile*>& aBoard, vector<CPla
 		//player lands on a station tile
 		if (aBoard[aPlayers[position]->GetPosition()]->GetOwner() == -1)
 		{
-			aBoard[aPlayers[position]->GetPosition()]->BuyProperty(cGame, aPlayers, position);//buy property
+			aBoard[aPlayers[position]->GetPosition()]->BuyProperty(cGame, aPlayers, position, ioLog);//buy property
 		}
 		else if (aBoard[aPlayers[position]->GetPosition()]->GetOwner() != position || aBoard[aPlayers[position]->GetPosition()]->GetOwner() == -1)
 		{
@@ -611,7 +635,7 @@ void playerLanding(unique_ptr<CGame>& cGame, vector<CTile*>& aBoard, vector<CPla
 				}
 			}
 
-			aBoard[aPlayers[position]->GetPosition()]->PayFare(cGame, aBoard, aPlayers, position, pStationOwned);//pay rent
+			aBoard[aPlayers[position]->GetPosition()]->PayFare(cGame, aBoard, aPlayers, position, pStationOwned, ioLog);//pay rent
 		}
 		else
 		{
@@ -625,36 +649,36 @@ void playerLanding(unique_ptr<CGame>& cGame, vector<CTile*>& aBoard, vector<CPla
 	case 5:
 		if (aPlayers[position]->GetJailCounter() == 0)
 		{
-			aBoard[aPlayers[position]->GetPosition()]->PassingJail(aPlayers, position);
+			aBoard[aPlayers[position]->GetPosition()]->PassingJail(aPlayers, position, ioLog);
 		}
 		//player lands on a jail tile
 		break;
 	case 6:
 		//player lands on go to jail
-		aBoard[aPlayers[position]->GetPosition()]->GoToJail(cGame, aBoard, aPlayers, position);
+		aBoard[aPlayers[position]->GetPosition()]->GoToJail(cGame, aBoard, aPlayers, position, ioLog);
 		break;
 	case 7:
 		//player lands on chance
-		cout << aPlayers[position]->GetName() << " picks a chance card\n";
-		ResolveCard(aChance, aPlayers, aBoard, cGame, position);
+		ioLog->writeToFile(aPlayers[position]->GetName() + " picks a chance card\n");
+		ResolveCard(aChance, aPlayers, aBoard, cGame, position, ioLog);
 		
 		break;
 	case 8:
-		cout << aPlayers[position]->GetName() << " picks a community chest card\n";
-		ResolveCard(aCommunityChest, aPlayers, aBoard, cGame, position);
+		ioLog->writeToFile(aPlayers[position]->GetName() + " picks a community chest card\n");
+		ResolveCard(aCommunityChest, aPlayers, aBoard, cGame, position, ioLog);
 		//player lands on community chest
 		break;
 	case 9:
 		//player lands on free parking
-		aBoard[aPlayers[position]->GetPosition()]->OutputText(aPlayers, position);
+		aBoard[aPlayers[position]->GetPosition()]->OutputText(aPlayers, position, ioLog);
 		break;
 	case 10:
-		aBoard[aPlayers[position]->GetPosition()]->PayTax(cGame, aPlayers, position);
+		aBoard[aPlayers[position]->GetPosition()]->PayTax(cGame, aPlayers, position, ioLog);
 		//player lands on tax
 		break;
 
 	default:
-		cout << "Tile not specified\n";
+		ioLog->writeToFile("Tile not specified\n");
 		break;
 	}
 }
@@ -662,7 +686,7 @@ void playerLanding(unique_ptr<CGame>& cGame, vector<CTile*>& aBoard, vector<CPla
 
 
 //player moves
-void playerTurn(unique_ptr<CGame>& cGame, vector<CTile*>& aBoard, vector<CPlayer*>& aPlayers, vector<CCard*>& aChance, vector<CCard*>& aCommunityChest)
+void playerTurn(unique_ptr<CGame>& cGame, vector<CTile*>& aBoard, vector<CPlayer*>& aPlayers, vector<CCard*>& aChance, vector<CCard*>& aCommunityChest, unique_ptr<Logger>& ioLog)
 {
 	//holds the dice number
 	unique_ptr<int> pDieRoll = make_unique<int>(0);
@@ -671,7 +695,7 @@ void playerTurn(unique_ptr<CGame>& cGame, vector<CTile*>& aBoard, vector<CPlayer
 	{
 		if (!aPlayers[i]->IsBankrupt())
 		{
-			cout << aPlayers[i]->GetName() << "'s turn\n";
+			ioLog->writeToFile(aPlayers[i]->GetName() + "'s turn\n");
 
 			//roll dice
 			if (aPlayers[i]->GetJailCounter() == 0)
@@ -685,7 +709,7 @@ void playerTurn(unique_ptr<CGame>& cGame, vector<CTile*>& aBoard, vector<CPlayer
 				//if player rolls a six
 				if (cGame->rollDice() >= 4)
 				{
-					cout << aPlayers[i]->GetName() << " got lucky and left jail early\n";
+					ioLog->writeToFile(aPlayers[i]->GetName() + " got lucky and left jail early\n");
 					//pay fine
 					aPlayers[i]->TakeMoney(50, cGame);
 					//get out of prison
@@ -702,7 +726,7 @@ void playerTurn(unique_ptr<CGame>& cGame, vector<CTile*>& aBoard, vector<CPlayer
 			{
 				if (cGame->rollDice() == 6)
 				{
-					cout << aPlayers[i]->GetName() << "got lucky and left jail early\n";
+					ioLog->writeToFile(aPlayers[i]->GetName() + "got lucky and left jail early\n");
 					//pay fine
 					aPlayers[i]->TakeMoney(50, cGame);
 					//get out of prison
@@ -732,7 +756,7 @@ void playerTurn(unique_ptr<CGame>& cGame, vector<CTile*>& aBoard, vector<CPlayer
 				{
 					*pDieRoll += *pSecondDie;
 
-					cout << "DOUBLES!\n " << aPlayers[i]->GetName() << "rolled 2 " << *pDieRoll << "s. " << aPlayers[i]->GetName() << " gets to roll again\n";
+					ioLog->writeToFile("DOUBLES!\n " + aPlayers[i]->GetName() + "rolled 2 " + to_string(*pDieRoll) + "s. " + aPlayers[i]->GetName() + " gets to roll again\n");
 
 					//rolls the die again
 					*pSecondDie = cGame->rollDice();
@@ -744,7 +768,7 @@ void playerTurn(unique_ptr<CGame>& cGame, vector<CTile*>& aBoard, vector<CPlayer
 					//if doubles a second time
 					if (*pSecondDie == *pThirdDie)
 					{
-						cout << "DOUBLES again! Roll one more time. If " << aPlayers[i]->GetName() << " rolls doubles again they will move to jail\n";
+						ioLog->writeToFile("DOUBLES again! Roll one more time. If " + aPlayers[i]->GetName() + " rolls doubles again they will move to jail\n");
 
 						*pSecondDie = cGame->rollDice();
 						*pThirdDie = cGame->rollDice();
@@ -778,7 +802,7 @@ void playerTurn(unique_ptr<CGame>& cGame, vector<CTile*>& aBoard, vector<CPlayer
 
 			//move player position
 
-			cout << aPlayers[i]->GetName() << " rolled a " << *pDieRoll << "\n";
+			ioLog->writeToFile(aPlayers[i]->GetName() + " rolled a " + to_string(*pDieRoll) + "\n");
 
 			aPlayers[i]->MovePosition(*pDieRoll);
 			//if past go, gain 200 munny
@@ -802,12 +826,12 @@ void playerTurn(unique_ptr<CGame>& cGame, vector<CTile*>& aBoard, vector<CPlayer
 			}
 
 			//head to player landing to see where player landed
-			playerLanding(cGame, aBoard, aPlayers, i, pDieRoll, aChance, aCommunityChest);
+			playerLanding(cGame, aBoard, aPlayers, i, pDieRoll, aChance, aCommunityChest, ioLog);
 
 			//check if player has minus money
 			if (aPlayers[i]->GetMoney() <= 0)
 			{
-				cout << aPlayers[i]->GetName() << " has no money left and wil have to mortgage properties\n";
+				ioLog->writeToFile(aPlayers[i]->GetName() + " has no money left and wil have to mortgage properties\n");
 
 				for (auto const& it : aBoard)
 				{
@@ -829,8 +853,8 @@ void playerTurn(unique_ptr<CGame>& cGame, vector<CTile*>& aBoard, vector<CPlayer
 				//if already mortgaged all of them, reset properties owned by them, set stats to zero / delete
 				if (aPlayers[i]->GetMoney() < 0)
 				{
-					cout << aPlayers[i]->GetName() << " has no money left after mortgaging their properties\n";
-					cout << aPlayers[i]->GetName() << " is declared bankrupt!\n";
+					ioLog->writeToFile(aPlayers[i]->GetName() + " has no money left after mortgaging their properties\n");
+					ioLog->writeToFile(aPlayers[i]->GetName() + " is declared bankrupt!\n");
 
 					//cycle through all tiles
 					for (int j = 0; j < aBoard.size() - 1; j++)
@@ -847,7 +871,7 @@ void playerTurn(unique_ptr<CGame>& cGame, vector<CTile*>& aBoard, vector<CPlayer
 
 			}
 
-			cout << aPlayers[i]->GetName() << " has " << char(156) << aPlayers[i]->GetMoney() << "\n\n";
+			ioLog->writeToFile(aPlayers[i]->GetName() + " has " + char(156) + to_string(aPlayers[i]->GetMoney()) + "\n\n");
 		}
 
 		
@@ -856,7 +880,7 @@ void playerTurn(unique_ptr<CGame>& cGame, vector<CTile*>& aBoard, vector<CPlayer
 	//roll dice
 	if (cGame->isPlaying())
 	{
-		OutputPlayers(cGame, aPlayers, false);
+		OutputPlayers(cGame, aPlayers, ioLog, false);
 		cout << "Press any key to continue to the next round\n";
 		while (std::cin.get() != '\n') {
 			//Loop runs and discards any characters typed before Enter
@@ -979,7 +1003,7 @@ int main()
 	//check if customisation occurs
 	if (CheckCustomisation() == true)
 	{
-		CreateCustomisation(cGame);//semd to a function
+		CreateCustomisation(cGame, ioLog);//semd to a function
 	}
 
 	//if files have a specific names that are changed
@@ -1068,7 +1092,7 @@ int main()
 	{
 		ioLog->writeToFile("Round " + std::to_string(cGame->GetCurrentRound() + 1) + "\n\n");
 
-		playerTurn(cGame, aBoard, aPlayers, aChanceCards, aCommunityChestCards);
+		playerTurn(cGame, aBoard, aPlayers, aChanceCards, aCommunityChestCards, ioLog);
 
 		//if short game rules is true, and all tiles bought
 		//end game
@@ -1076,7 +1100,7 @@ int main()
 		cGame->NextRound();
 	}
 	
-	GameEnd(cGame, aPlayers);
+	GameEnd(cGame, aPlayers, ioLog);
 	//delete items here
 	
 	aBoard.clear();

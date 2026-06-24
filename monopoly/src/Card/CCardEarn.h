@@ -11,7 +11,7 @@ public:
     CCardEarn(istream& file);
     ~CCardEarn();
 
-    void GetText();
+    void GetText(unique_ptr<Logger>& ioLog);
 
     void SetMoney(int tMoney);
     int GetMoney();

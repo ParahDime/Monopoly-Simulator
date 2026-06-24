@@ -1,6 +1,7 @@
 #include "../Header.h"
 #include "../CGame.h"
 #include "../CPlayer.h"
+#include "../Logger.h"
 
 #pragma once
 class CCard
@@ -16,7 +17,7 @@ public:
 	int GetType();
 
 	void SetText(string tText);
-	virtual void GetText();
+	virtual void GetText(unique_ptr<Logger>& ioLog);
 
 	virtual void SetMoney();
 	virtual int GetMoney();

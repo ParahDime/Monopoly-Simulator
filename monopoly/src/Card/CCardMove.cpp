@@ -10,9 +10,9 @@ CCardMove::~CCardMove()
 
 }
 
-void CCardMove::GetText()
+void CCardMove::GetText(unique_ptr<Logger>& ioLog)
 {
-	cout << mName << "\n";
+	ioLog->writeToFile(mName + "\n");
 }
 
 void CCardMove::SetSpecific(bool tSpecific)

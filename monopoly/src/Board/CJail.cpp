@@ -10,11 +10,11 @@ CJail::~CJail()
 
 }
 
-void CJail::PassingJail(vector<CPlayer*>& aPlayers, int position)
+void CJail::PassingJail(vector<CPlayer*>& aPlayers, int position, unique_ptr<Logger>& ioLog)
 {
 	//use if statement to check if player is in prison
 
 	//else
 
-	cout << aPlayers[position]->GetName() << " is just passing through\n";
+	ioLog->writeToFile(aPlayers[position]->GetName() + " is just passing through\n");
 }

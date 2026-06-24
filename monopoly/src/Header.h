@@ -28,5 +28,6 @@ using std::ostream;
 using std::ws;
 using std::unique_ptr;
 using std::vector;
+using std::to_string;
 
 #pragma once

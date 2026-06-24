@@ -9,7 +9,7 @@ public:
     CCardCollection(istream& file);
     ~CCardCollection();
 
-    void GetText();
+    void GetText(unique_ptr<Logger>& ioLog);
 
     friend istream& operator >>(istream& inputStream, CCardCollection& cCardCollection);
 };

@@ -9,10 +9,10 @@ CGoToJail::~CGoToJail()
 {
 }
 
-void CGoToJail::GoToJail(unique_ptr<CGame>& cGame, vector<CTile*>& aBoard, vector<CPlayer*>& aPlayers, int& position)
+void CGoToJail::GoToJail(unique_ptr<CGame>& cGame, vector<CTile*>& aBoard, vector<CPlayer*>& aPlayers, int& position, unique_ptr<Logger>& ioLog)
 {
 
-	cout << aPlayers[position]->GetName() << " is sent to jail.\n";
+	ioLog->writeToFile(aPlayers[position]->GetName() + " is sent to jail.\n");
 
 	for (int i = 0; i != aBoard.size(); i++)
 	{
@@ -32,8 +32,8 @@ void CGoToJail::GoToJail(unique_ptr<CGame>& cGame, vector<CTile*>& aBoard, vecto
 	{
 		//sets the players get out of jail status to false (card is used)
 		aPlayers[position]->changeJailCard();
-		cout << aPlayers[position]->GetName() << "uses their get out of jail card\n";
-		cout << aPlayers[position]->GetName() << "leaves jail\n";
+		ioLog->writeToFile(aPlayers[position]->GetName() + "uses their get out of jail card\n");
+		ioLog->writeToFile(aPlayers[position]->GetName() + "leaves jail\n");
 		
 	}
 }
