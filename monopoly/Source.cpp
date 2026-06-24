@@ -51,7 +51,7 @@ bool VerifyCustomisation(unique_ptr<CGame>& cGame)
 	cout << "Difficulty: " << cGame->GetDifficulty() << "\n";
 	cout << "Number of players: " << cGame->GetPlayers() << "\n";
 	cout << "Number of dice used: " <<cGame->GetDiceNo() << "\n";
-
+	//cout << Dice-> << " sided dice used\n";
 
 	cout << "Are these customisation options correct?\n y / n";
 	if (ReturnChar() == 'n')
@@ -658,14 +658,14 @@ void playerTurn(unique_ptr<CGame>& cGame, vector<CTile*>& aBoard, vector<CPlayer
 			//roll dice
 			if (aPlayers[i]->GetJailCounter() == 0)
 			{
-				*pDieRoll = RNG(cGame->GetLowRoll(), cGame->GetHighRoll());
+				cGame->rollDice();
 			}
 
 			//if value is 1
 			else if (aPlayers[i]->GetJailCounter() == 1)
 			{
 				//if player rolls a six
-				if (RNG(cGame->GetLowRoll(), cGame->GetHighRoll()) >= 4)
+				if (cGame->rollDice() >= 4)
 				{
 					cout << aPlayers[i]->GetName() << " got lucky and left jail early\n";
 					//pay fine
@@ -673,7 +673,7 @@ void playerTurn(unique_ptr<CGame>& cGame, vector<CTile*>& aBoard, vector<CPlayer
 					//get out of prison
 					aPlayers[i]->SetJailCounter(0);
 
-					*pDieRoll = RNG(cGame->GetLowRoll(), cGame->GetHighRoll());
+					*pDieRoll = cGame->rollDice();
 				}
 				else //else player waits a turn
 				{
@@ -682,7 +682,7 @@ void playerTurn(unique_ptr<CGame>& cGame, vector<CTile*>& aBoard, vector<CPlayer
 			}
 			else //if value is higher than 1
 			{
-				if (RNG(cGame->GetLowRoll(), cGame->GetHighRoll()) == 6)
+				if (cGame->rollDice() == 6)
 				{
 					cout << aPlayers[i]->GetName() << "got lucky and left jail early\n";
 					//pay fine
@@ -690,7 +690,7 @@ void playerTurn(unique_ptr<CGame>& cGame, vector<CTile*>& aBoard, vector<CPlayer
 					//get out of prison
 					aPlayers[i]->SetJailCounter(0);
 
-					*pDieRoll = RNG(cGame->GetLowRoll(), cGame->GetHighRoll());
+					*pDieRoll = cGame->rollDice();
 				}
 				else
 				{
@@ -705,7 +705,7 @@ void playerTurn(unique_ptr<CGame>& cGame, vector<CTile*>& aBoard, vector<CPlayer
 			if (cGame->GetDiceNo() == 2 && aPlayers[i]->GetJailCounter() == 0)
 			{
 				unique_ptr<int> pSecondDie = make_unique<int>();
-				*pSecondDie = RNG(cGame->GetLowRoll(), cGame->GetHighRoll());
+				*pSecondDie = cGame->rollDice();
 
 
 
@@ -717,9 +717,9 @@ void playerTurn(unique_ptr<CGame>& cGame, vector<CTile*>& aBoard, vector<CPlayer
 					cout << "DOUBLES!\n " << aPlayers[i]->GetName() << "rolled 2 " << *pDieRoll << "s. " << aPlayers[i]->GetName() << " gets to roll again\n";
 
 					//rolls the die again
-					*pSecondDie = RNG(cGame->GetLowRoll(), cGame->GetHighRoll());
+					*pSecondDie = cGame->rollDice();
 					unique_ptr<int> pThirdDie = make_unique<int>();
-					*pThirdDie = RNG(cGame->GetLowRoll(), cGame->GetHighRoll());
+					*pThirdDie = cGame->rollDice();
 
 					*pDieRoll = *pDieRoll + *pSecondDie + *pThirdDie;
 
@@ -728,8 +728,8 @@ void playerTurn(unique_ptr<CGame>& cGame, vector<CTile*>& aBoard, vector<CPlayer
 					{
 						cout << "DOUBLES again! Roll one more time. If " << aPlayers[i]->GetName() << " rolls doubles again they will move to jail\n";
 
-						*pSecondDie = RNG(cGame->GetLowRoll(), cGame->GetHighRoll());
-						*pThirdDie = RNG(cGame->GetLowRoll(), cGame->GetHighRoll());
+						*pSecondDie = cGame->rollDice();
+						*pThirdDie = cGame->rollDice();
 
 						*pDieRoll = *pDieRoll + *pSecondDie + *pThirdDie;
 

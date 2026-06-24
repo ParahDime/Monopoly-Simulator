@@ -41,6 +41,8 @@ public:
 	int GetDiceNo();
 	void SetDiceNo(int diceNo);
 
+	int rollDice(); //roll the dice, return number
+
 	void BankTotalLose(int money);
 	void BankTotalGain(int money);
 

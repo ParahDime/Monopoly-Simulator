@@ -91,6 +91,28 @@ void CGame::SetDiceNo(int diceNo)
     mDiceNo = diceNo;
 }
 
+int CGame::rollDice()
+{
+    //random function
+
+    //obtain low, obtain high
+
+    //output number
+    int num;
+
+    //make random here
+
+    num = static_cast<int>(static_cast<double> (rand()) / (RAND_MAX + 1) * mHigh + mLow);
+
+    //if equal to 0, recursive call
+    if (num == 0)
+    {
+       rollDice();
+    }
+
+    return num;
+}
+
 int CGame::GetDiceNo()
 {
     return mDiceNo;
