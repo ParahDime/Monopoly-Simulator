@@ -3,6 +3,7 @@ bin/
 obj/
 x64/
 debug/
+game_results/
  
 # Visual Studio files
 .vs/

@@ -5,6 +5,7 @@
 #include "src/Board/CTileSort.h"
 #include "src/Card/CCardSort.h"
 #include "src/Card/CCard.h"
+#include "src/Logger.h"
 
 void Test()
 {
@@ -180,25 +181,31 @@ int RNG(int low, int high)
 	return *num;
 }
 
-
-
-//shows which player has won
-void GameEnd(unique_ptr<CGame>& cGame, vector<CPlayer*>& aPlayers)
+//output each player's total
+void OutputPlayers(unique_ptr<CGame>& cGame, vector<CPlayer*>& aPlayers, bool gameEnd)
 {
 	unique_ptr<int> pPlayerNo = make_unique<int>(0);
-	//for loop
-	std::sort(aPlayers.begin(), aPlayers.end());
 
-	
+	if (gameEnd)
+	{
+		cout << "Rounds played: " << cGame->GetCurrentRound() << "\n\n";
+	}
+	else {
+		cout << "End of round " << cGame->GetCurrentRound() << "\n\n";
+	}
 
 	for (auto i = aPlayers.begin(); i != aPlayers.end(); i++)
 	{
 		//output their name and money
 		cout << aPlayers[*pPlayerNo]->GetName() << " has " << char(156) << aPlayers[*pPlayerNo]->GetMoney();
+		if (!gameEnd)
+		{
+			cout << "Current position: " << aPlayers[*pPlayerNo]->GetPosition() << "\n";
+		}
+		//position
 		if (aPlayers[*pPlayerNo]->IsBankrupt())
 		{
 			cout << " declared BANKRUPT";
-			
 		}
 		cout << "\n";
 
@@ -206,6 +213,17 @@ void GameEnd(unique_ptr<CGame>& cGame, vector<CPlayer*>& aPlayers)
 
 		++*pPlayerNo;
 	}
+}
+
+
+
+//shows which player has won
+void GameEnd(unique_ptr<CGame>& cGame, vector<CPlayer*>& aPlayers)
+{
+	//for loop
+	std::sort(aPlayers.begin(), aPlayers.end());
+
+	OutputPlayers(cGame, aPlayers, true);
 	
 	cout << "Would you like to print game results?\n y / n\n";
 
@@ -658,7 +676,7 @@ void playerTurn(unique_ptr<CGame>& cGame, vector<CTile*>& aBoard, vector<CPlayer
 			//roll dice
 			if (aPlayers[i]->GetJailCounter() == 0)
 			{
-				cGame->rollDice();
+				*pDieRoll = cGame->rollDice();
 			}
 
 			//if value is 1
@@ -834,7 +852,17 @@ void playerTurn(unique_ptr<CGame>& cGame, vector<CTile*>& aBoard, vector<CPlayer
 
 		
 	}
+	
 	//roll dice
+	if (cGame->isPlaying())
+	{
+		OutputPlayers(cGame, aPlayers, false);
+		cout << "Press any key to continue to the next round\n";
+		while (std::cin.get() != '\n') {
+			//Loop runs and discards any characters typed before Enter
+		}
+		system("cls");
+	}
 }
 
 
@@ -931,6 +959,7 @@ int main()
 {
 	//replaces name for strings
 	unique_ptr<string> fileName = make_unique<string>();
+	unique_ptr<Logger> ioLog = make_unique<Logger>();
 	//const variables
 
 	//vectors
@@ -951,11 +980,6 @@ int main()
 	if (CheckCustomisation() == true)
 	{
 		CreateCustomisation(cGame);//semd to a function
-	}
-	else
-	{
-		//use preset values
-		cGame->SetValues();
 	}
 
 	//if files have a specific names that are changed
@@ -1037,11 +1061,12 @@ int main()
 
 	//game loop
 
-	cout << "\nWelcome to monopoly simulator\n";
+	ioLog->writeToFile("\nWelcome to monopoly simulator\n");
+
 
 	while (cGame->GetMaxRound() > cGame->GetCurrentRound())
 	{
-		cout << "Round " << cGame->GetCurrentRound() << "\n\n";
+		ioLog->writeToFile("Round " + std::to_string(cGame->GetCurrentRound() + 1) + "\n\n");
 
 		playerTurn(cGame, aBoard, aPlayers, aChanceCards, aCommunityChestCards);
 
@@ -1056,6 +1081,8 @@ int main()
 	
 	aBoard.clear();
 	aPlayers.clear();
+
+	ioLog->closeFile();
 
 	_CrtDumpMemoryLeaks();
 	return 0;

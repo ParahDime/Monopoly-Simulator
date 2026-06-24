@@ -87,7 +87,7 @@
     <ClInclude Include="src\Board\CChest.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Dice.h">
+    <ClInclude Include="src\Logger.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -164,7 +164,7 @@
     <ClCompile Include="src\Board\CChest.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Dice.cpp">
+    <ClCompile Include="src\Logger.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

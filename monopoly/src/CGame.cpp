@@ -5,23 +5,17 @@ CGame::CGame()
     mBank = 40000;
     mLow = 1;
     mHigh = 6;
-    mCurrentRound = 1;
+    mCurrentRound = 0;
     mTileOwned = 0;
-}
-
-
-
-CGame::~CGame()
-{
-}
-
-//if not customising the game
-void CGame::SetValues()
-{
     mMaxRound = 50;
     mPlayers = 4; //no of players
     mDiceNo = 1;
     mMultiplier = 2; //difficulty used
+}
+
+
+CGame::~CGame()
+{
 }
 
 int CGame::GetMaxRound()
@@ -93,16 +87,12 @@ void CGame::SetDiceNo(int diceNo)
 
 int CGame::rollDice()
 {
-    //random function
-
-    //obtain low, obtain high
-
-    //output number
     int num;
 
     //make random here
 
-    num = static_cast<int>(static_cast<double> (rand()) / (RAND_MAX + 1) * mHigh + mLow);
+    //mHigh = no. of dice faces, 1 lowest possible number
+    num = static_cast<int>(static_cast<double> (rand()) / (RAND_MAX + 1) * mHigh + 1);
 
     //if equal to 0, recursive call
     if (num == 0)
@@ -187,4 +177,16 @@ int CGame::GetMultiplier()
         break;
     }
     return 0;
+}
+
+//returns if user is player1
+bool CGame::isPlaying()
+{
+    return mPlaying;
+}
+
+//used to allow user to play
+void CGame::setPlaying()
+{
+    mPlaying = true;
 }

@@ -15,11 +15,10 @@ private:
 
 	int mMaxTiles; //the maximum amount of tiles that are on the board that can be bought
 	int mTileOwned; //the amount of tiles owned by players
-	bool mPlaying = false;
+	bool mPlaying = false; // determines if player1 is playing
 public:
 	CGame();
 	~CGame();
-	void SetValues();
 
 	int GetCurrentRound();
 	int GetMaxRound();
@@ -50,5 +49,8 @@ public:
 	int GetGoMoney();
 
 	int GetMultiplier(); //requires 
+
+	bool isPlaying();
+	void setPlaying();
 };
 
