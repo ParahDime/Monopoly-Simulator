@@ -214,10 +214,14 @@ void OutputPlayers(unique_ptr<CGame>& cGame, vector<CPlayer*>& aPlayers, unique_
 
 	if (gameEnd)
 	{
-		ioLog->writeToFile("Rounds played: " + to_string(cGame->GetCurrentRound()) + "\n\n");
+		ioLog->writeToFile("=====================================================================\n\n");
+		ioLog->writeToFile("		Rounds played: " + to_string(cGame->GetCurrentRound()) + "\n\n");
+		ioLog->writeToFile("=====================================================================\n\n");
 	}
 	else {
-		ioLog->writeToFile("End of round " + to_string(cGame->GetCurrentRound()) + "\n\n");
+		ioLog->writeToFile("=====================================================================\n\n");
+		ioLog->writeToFile("		End of round " + to_string(cGame->GetCurrentRound()) + "\n\n");
+		ioLog->writeToFile("=====================================================================\n\n");
 	}
 
 	for (auto i = aPlayers.begin(); i != aPlayers.end(); i++)
@@ -325,7 +329,7 @@ void BuildRepairs(vector<CPlayer*>& aPlayers, vector<CCard*>& aCards, vector<CTi
 
 	
 	//finalise cost of repairs
-	ioLog->writeToFile(aPlayers[position]->GetName() + "pays repairs for " + to_string(*pHouses) + " houses and " + to_string(*pHotels) + " hotels.\n");
+	ioLog->writeToFile(aPlayers[position]->GetName() + " pays repairs for " + to_string(*pHouses) + " houses and " + to_string(*pHotels) + " hotels.\n");
 	*pHouses = *pHouses * aCards[*pCard]->GetHouseCost();
 	*pHotels = *pHotels * aCards[*pCard]->GetHotelCost();
 
@@ -490,8 +494,7 @@ void playerLanding(unique_ptr<CGame>& cGame, vector<CTile*>& aBoard, vector<CPla
 			if (aPlayers[position]->GetMoney() >= aBoard[aPlayers[position]->GetPosition()]->GetPrice())
 			{
 				aBoard[aPlayers[position]->GetPosition()]->BuyProperty(cGame, aPlayers, position, ioLog);
-				cout << aBoard[aPlayers[position]->GetPosition()]->GetOwner();
-				//buy property
+				//cout << aBoard[aPlayers[position]->GetPosition()]->GetOwner() << "number";
 			}
 			else {
 				cout << "Not enough money to buy the property\n";
@@ -1084,13 +1087,15 @@ int main()
 	aNames.clear();
 
 	//game loop
-
-	ioLog->writeToFile("\nWelcome to monopoly simulator\n");
-
+	ioLog->writeToFile("=====================================================================\n");
+	ioLog->writeToFile("			Monopoly simulator\n");
+	ioLog->writeToFile("=====================================================================\n\n");
 
 	while (cGame->GetMaxRound() > cGame->GetCurrentRound())
 	{
-		ioLog->writeToFile("Round " + std::to_string(cGame->GetCurrentRound() + 1) + "\n\n");
+		ioLog->writeToFile("=====================================================================\n");
+		ioLog->writeToFile("			Round " + std::to_string(cGame->GetCurrentRound() + 1) + "\n");
+		ioLog->writeToFile("=====================================================================\n");
 
 		playerTurn(cGame, aBoard, aPlayers, aChanceCards, aCommunityChestCards, ioLog);
 

@@ -91,7 +91,7 @@ int CGame::rollDice()
     //make random here
 
     //mHigh = no. of dice faces, 1 lowest possible number
-    num = static_cast<int>(static_cast<double> (rand()) / (RAND_MAX + 1) * mHigh + 1);
+    num = static_cast<int>(static_cast<double> (rand()) / (RAND_MAX + 1.0) * mHigh + 1);
 
     //if equal to 0, recursive call
     if (num == 0)
