@@ -1,5 +1,6 @@
 #include "Header.h"
 #include "CGame.h"
+#include "Personality.h"
 
 #pragma once
 class CPlayer
@@ -11,6 +12,7 @@ private:
 	int mJailCounter = 0;
 	bool mJailCard = false;
 	bool mIsBankrupt = false;
+	unique_ptr<IBoneBrain> m_brain; //struct to manage decision making
 
 public:
 	CPlayer();
@@ -37,6 +39,9 @@ public:
 	void SetJailCounter(int counter);
 	int GetJailCounter();
 	void PassTurn();
+
+	void SetPersonality(unique_ptr<IBoneBrain> newBrain);
+	bool DecidesToBuy(int propertyCost);
 
 	void SetValues(unique_ptr<CGame>& cGame);
 };

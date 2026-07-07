@@ -90,6 +90,9 @@
     <ClInclude Include="src\Logger.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\Personality.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\CGame.cpp">
@@ -167,6 +170,9 @@
     <ClCompile Include="src\Logger.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\Personality.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Text Include="config\Board.txt" />
@@ -176,5 +182,10 @@
     <Text Include="..\todo.txt">
       <Filter>Resource Files</Filter>
     </Text>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="houserules.json">
+      <Filter>Resource Files</Filter>
+    </None>
   </ItemGroup>
 </Project>

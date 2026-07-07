@@ -51,8 +51,8 @@ bool VerifyCustomisation(unique_ptr<CGame>& cGame, unique_ptr<Logger>& ioLog)
 	cout << "Max number of rounds: " << cGame->GetMaxRound() << "\n";
 	cout << "Difficulty: " << cGame->GetDifficulty() << "\n";
 	cout << "Number of players: " << cGame->GetPlayers() << "\n";
-	cout << "Number of dice used: " <<cGame->GetDiceNo() << "\n";
-	//cout << Dice-> << " sided dice used\n";
+	cout << "Number of dice used: " << cGame->GetDiceNo() << "\n";
+	cout << "Number of dice sides: " << cGame->GetHighRoll() << "\n";
 
 	cout << "Are these customisation options correct?\n y / n";
 	if (ReturnChar() == 'n')
@@ -120,7 +120,7 @@ void CreateCustomisation(unique_ptr<CGame>& cGame, unique_ptr<Logger>& ioLog)
 	//no of dice / sides of dice
 
 	//define dice side here
-	int dice[6] = { 1, 2, 3, 4, 5, 6 };
+	int dice[6] = { 4, 6, 10, 12, 15, 20 };
 	cout << "Select a sided die\n";
 	for (const auto& die : dice) {
 		std::cout << die << "\t";
@@ -134,6 +134,7 @@ void CreateCustomisation(unique_ptr<CGame>& cGame, unique_ptr<Logger>& ioLog)
 		for (const auto& face : dice) {
 			if (playerInput == face) {
 				matchFound = true;
+				cGame->SetHighRoll(playerInput);
 				break;
 			}
 		}
@@ -142,7 +143,7 @@ void CreateCustomisation(unique_ptr<CGame>& cGame, unique_ptr<Logger>& ioLog)
 		}
 	}
 
-	cout << playerInput << "sided die picked\n";
+	cout << playerInput << " sided die picked\n";
 
 	cout << "Would you like to use 2 dice?\n y / n\n";
 	if (ReturnChar() == 'y')
@@ -689,7 +690,7 @@ void playerLanding(unique_ptr<CGame>& cGame, vector<CTile*>& aBoard, vector<CPla
 
 
 //player moves
-void playerTurn(unique_ptr<CGame>& cGame, vector<CTile*>& aBoard, vector<CPlayer*>& aPlayers, vector<CCard*>& aChance, vector<CCard*>& aCommunityChest, unique_ptr<Logger>& ioLog)
+void playerTurn(unique_ptr<CGame>& cGame, vector<CTile*>& aBoard, vector<CPlayer*>& aPlayers, vector<CCard*>& aChance, vector<CCard*>& aCommunityChest, unique_ptr<Logger>& ioLog, unique_ptr<int>& bankruptCount)
 {
 	//holds the dice number
 	unique_ptr<int> pDieRoll = make_unique<int>(0);
@@ -698,7 +699,7 @@ void playerTurn(unique_ptr<CGame>& cGame, vector<CTile*>& aBoard, vector<CPlayer
 	{
 		if (!aPlayers[i]->IsBankrupt())
 		{
-			ioLog->writeToFile(aPlayers[i]->GetName() + "'s turn\n");
+			ioLog->writeToFile(aPlayers[i]->GetName() + "'s turn!\n");
 
 			//roll dice
 			if (aPlayers[i]->GetJailCounter() == 0)
@@ -746,20 +747,20 @@ void playerTurn(unique_ptr<CGame>& cGame, vector<CTile*>& aBoard, vector<CPlayer
 				//drop to zero
 			}
 
+			unique_ptr<int> pSecondDie = make_unique<int>();
+			unique_ptr<int> pTotalRoll = make_unique<int>();
+
 			//if player selected 2 die
 			if (cGame->GetDiceNo() == 2 && aPlayers[i]->GetJailCounter() == 0)
-			{
-				unique_ptr<int> pSecondDie = make_unique<int>();
+			{			
 				*pSecondDie = cGame->rollDice();
-
-
 
 				//if double, roll again
 				if (*pSecondDie == *pDieRoll)
 				{
 					*pDieRoll += *pSecondDie;
 
-					ioLog->writeToFile("DOUBLES!\n " + aPlayers[i]->GetName() + "rolled 2 " + to_string(*pDieRoll) + "s. " + aPlayers[i]->GetName() + " gets to roll again\n");
+					ioLog->writeToFile("DOUBLE " + to_string(*pSecondDie) + "!\n " + aPlayers[i]->GetName() + "rolled 2 " + to_string(*pSecondDie) + "s. " + aPlayers[i]->GetName() + " gets to roll again\n");
 
 					//rolls the die again
 					*pSecondDie = cGame->rollDice();
@@ -771,7 +772,7 @@ void playerTurn(unique_ptr<CGame>& cGame, vector<CTile*>& aBoard, vector<CPlayer
 					//if doubles a second time
 					if (*pSecondDie == *pThirdDie)
 					{
-						ioLog->writeToFile("DOUBLES again! Roll one more time. If " + aPlayers[i]->GetName() + " rolls doubles again they will move to jail\n");
+						ioLog->writeToFile("DOUBLES again, rolled 2 " + to_string(*pSecondDie) + "! Roll one more time. If " + aPlayers[i]->GetName() + " rolls doubles again they will move to jail\n");
 
 						*pSecondDie = cGame->rollDice();
 						*pThirdDie = cGame->rollDice();
@@ -780,6 +781,7 @@ void playerTurn(unique_ptr<CGame>& cGame, vector<CTile*>& aBoard, vector<CPlayer
 
 						//if doubles a third time
 						if (*pSecondDie == *pThirdDie)
+							ioLog->writeToFile("DOUBLES again, rolled 2 " + to_string(*pSecondDie) + "! " + aPlayers[i]->GetName() + " goes straight to jail");
 						{
 							//for every tile on the board
 							for (auto const& it : aBoard)
@@ -804,8 +806,14 @@ void playerTurn(unique_ptr<CGame>& cGame, vector<CTile*>& aBoard, vector<CPlayer
 			} //end of players rolling die
 
 			//move player position
-
-			ioLog->writeToFile(aPlayers[i]->GetName() + " rolled a " + to_string(*pDieRoll) + "\n");
+			if (*pSecondDie != 0)
+			{
+				ioLog->writeToFile(aPlayers[i]->GetName() + " rolled a total of " + to_string(*pDieRoll) + "\n");
+			}	
+			else
+			{
+				ioLog->writeToFile(aPlayers[i]->GetName() + " rolled a " + to_string(*pDieRoll));
+			}
 
 			aPlayers[i]->MovePosition(*pDieRoll);
 			//if past go, gain 200 munny
@@ -858,6 +866,7 @@ void playerTurn(unique_ptr<CGame>& cGame, vector<CTile*>& aBoard, vector<CPlayer
 				{
 					ioLog->writeToFile(aPlayers[i]->GetName() + " has no money left after mortgaging their properties\n");
 					ioLog->writeToFile(aPlayers[i]->GetName() + " is declared bankrupt!\n");
+					(*bankruptCount)++;
 
 					//cycle through all tiles
 					for (int j = 0; j < aBoard.size() - 1; j++)
@@ -987,6 +996,7 @@ int main()
 	//replaces name for strings
 	unique_ptr<string> fileName = make_unique<string>();
 	unique_ptr<Logger> ioLog = make_unique<Logger>();
+	unique_ptr<int> bankruptCount = make_unique<int>(0);
 	//const variables
 
 	//vectors
@@ -1080,7 +1090,7 @@ int main()
 
 		aPlayers.push_back(playerPtr);
 
-		cout << "Player " << aPlayers[i]->GetName() << " initialised\n\n";
+		cout << "Player: " << aPlayers[i]->GetName() << " initialised\n\n";
 	}
 	
 	
@@ -1091,16 +1101,13 @@ int main()
 	ioLog->writeToFile("			Monopoly simulator\n");
 	ioLog->writeToFile("=====================================================================\n\n");
 
-	while (cGame->GetMaxRound() > cGame->GetCurrentRound())
+	while (cGame->GetMaxRound() > cGame->GetCurrentRound() && *bankruptCount <= (aPlayers.size() - 2))
 	{
 		ioLog->writeToFile("=====================================================================\n");
-		ioLog->writeToFile("			Round " + std::to_string(cGame->GetCurrentRound() + 1) + "\n");
+		ioLog->writeToFile("			Round " + std::to_string((cGame->GetCurrentRound() + 1)) + "\n");
 		ioLog->writeToFile("=====================================================================\n");
 
-		playerTurn(cGame, aBoard, aPlayers, aChanceCards, aCommunityChestCards, ioLog);
-
-		//if short game rules is true, and all tiles bought
-		//end game
+		playerTurn(cGame, aBoard, aPlayers, aChanceCards, aCommunityChestCards, ioLog, bankruptCount);
 
 		cGame->NextRound();
 	}

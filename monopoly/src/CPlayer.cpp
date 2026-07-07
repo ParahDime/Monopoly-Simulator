@@ -103,6 +103,16 @@ void CPlayer::PassTurn()
 	}
 }
 
+void CPlayer::SetPersonality(unique_ptr<IBoneBrain> newBrain)
+{
+
+}
+
+bool CPlayer::DecidesToBuy(int propertyCost)
+{
+	return true;
+}
+
 void CPlayer::SetValues(unique_ptr<CGame>& cGame)
 {
 	mMoney = 1500;
