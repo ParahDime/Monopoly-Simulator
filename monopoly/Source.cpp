@@ -1,4 +1,4 @@
-#include "src/Header.h"
+﻿#include "src/Header.h"
 #include "src/CPlayer.h"
 #include "src/CGame.h"
 #include "src/Board/CTile.h"
@@ -48,17 +48,21 @@ char ReturnChar()
 //bool used to show it changes are still needed (then set to true)
 bool VerifyCustomisation(unique_ptr<CGame>& cGame, unique_ptr<Logger>& ioLog)
 {
-	cout << "Max number of rounds: " << cGame->GetMaxRound() << "\n";
-	cout << "Difficulty: " << cGame->GetDifficulty() << "\n";
-	cout << "Number of players: " << cGame->GetPlayers() << "\n";
-	cout << "Number of dice used: " << cGame->GetDiceNo() << "\n";
-	cout << "Number of dice sides: " << cGame->GetHighRoll() << "\n";
-
-	cout << "Are these customisation options correct?\n y / n";
+	system("cls");
+	ioLog->writeToFile("=====================================================================");
+	ioLog->writeToFile("			MONOPOLY SIMULATOR CONFIGURATION");
+	ioLog->writeToFile("=====================================================================\n");
+	ioLog->writeToFile("[+] Max number of rounds: " + to_string(cGame->GetMaxRound()));
+	ioLog->writeToFile("[+] Number of players: " + to_string(cGame->GetPlayers()));
+	ioLog->writeToFile("[+] Difficulty: " + cGame->GetDifficulty());
+	ioLog->writeToFile("[+] Number of dice used: " + to_string(cGame->GetDiceNo()));
+	ioLog->writeToFile("[+] Number of dice sides: " + to_string(cGame->GetHighRoll()) + "\n");
+	
+	ioLog->writeToFile("=====================================================================\n");
+	
+	cout << "Are these customisation options correct?	 y / n\n";
 	if (ReturnChar() == 'n')
 	{
-		cout << "\n\n\n\n";
-		//clear console here
 		return true;
 	}
 	else
@@ -212,17 +216,20 @@ int RNG(int low, int high)
 void OutputPlayers(unique_ptr<CGame>& cGame, vector<CPlayer*>& aPlayers, unique_ptr<Logger>& ioLog, bool gameEnd)
 {
 	unique_ptr<int> pPlayerNo = make_unique<int>(0);
+	std::sort(aPlayers.begin(), aPlayers.end(), [](const auto& a, const auto& b) {
+		return a->GetMoney() > b->GetMoney();
+		});
 
 	if (gameEnd)
 	{
-		ioLog->writeToFile("=====================================================================\n\n");
-		ioLog->writeToFile("		Rounds played: " + to_string(cGame->GetCurrentRound()) + "\n\n");
-		ioLog->writeToFile("=====================================================================\n\n");
+		ioLog->writeToFile("=====================================================================");
+		ioLog->writeToFile("		Rounds played: " + to_string(cGame->GetCurrentRound()));
+		ioLog->writeToFile("=====================================================================\n");
 	}
 	else {
-		ioLog->writeToFile("=====================================================================\n\n");
-		ioLog->writeToFile("		End of round " + to_string(cGame->GetCurrentRound()) + "\n\n");
-		ioLog->writeToFile("=====================================================================\n\n");
+		ioLog->writeToFile("=====================================================================");
+		ioLog->writeToFile("		End of round " + to_string(cGame->GetCurrentRound()));
+		ioLog->writeToFile("=====================================================================\n");
 	}
 
 	for (auto i = aPlayers.begin(); i != aPlayers.end(); i++)
@@ -474,7 +481,7 @@ void playerLanding(unique_ptr<CGame>& cGame, vector<CTile*>& aBoard, vector<CPla
 	//player lands on X square
 	if (aPlayers[position]->GetJailCounter() == 0)
 	{
-		ioLog->writeToFile(aPlayers[position]->GetName() + " lands on " + aBoard[aPlayers[position]->GetPosition()]->GetName());
+		ioLog->writeToFile("[ Landed ]:   " + aBoard[aPlayers[position]->GetPosition()]->GetName());
 	}
 	else
 	{
@@ -699,7 +706,9 @@ void playerTurn(unique_ptr<CGame>& cGame, vector<CTile*>& aBoard, vector<CPlayer
 	{
 		if (!aPlayers[i]->IsBankrupt())
 		{
-			ioLog->writeToFile(aPlayers[i]->GetName() + "'s turn!\n");
+			ioLog->writeToFile("===============");
+			ioLog->writeToFile(">>   " + aPlayers[i]->GetName() + "'s turn!");
+			ioLog->writeToFile("===============\n");
 
 			//roll dice
 			if (aPlayers[i]->GetJailCounter() == 0)
@@ -806,14 +815,7 @@ void playerTurn(unique_ptr<CGame>& cGame, vector<CTile*>& aBoard, vector<CPlayer
 			} //end of players rolling die
 
 			//move player position
-			if (*pSecondDie != 0)
-			{
-				ioLog->writeToFile(aPlayers[i]->GetName() + " rolled a total of " + to_string(*pDieRoll) + "\n");
-			}	
-			else
-			{
-				ioLog->writeToFile(aPlayers[i]->GetName() + " rolled a " + to_string(*pDieRoll));
-			}
+			ioLog->writeToFile("[ Rolled ]:   " + to_string(*pDieRoll));
 
 			aPlayers[i]->MovePosition(*pDieRoll);
 			//if past go, gain 200 munny
@@ -883,7 +885,8 @@ void playerTurn(unique_ptr<CGame>& cGame, vector<CTile*>& aBoard, vector<CPlayer
 
 			}
 
-			ioLog->writeToFile(aPlayers[i]->GetName() + " has " + char(156) + to_string(aPlayers[i]->GetMoney()) + "\n\n");
+			string cash = "[Cash]:   ";
+			ioLog->writeToFile(cash + char(156) + to_string(aPlayers[i]->GetMoney()) + "\n\n");
 		}
 
 		
@@ -993,11 +996,9 @@ template <class S, class T> bool CheckFile(S& file, T& fileName)
 
 int main()
 {
-	//replaces name for strings
 	unique_ptr<string> fileName = make_unique<string>();
 	unique_ptr<Logger> ioLog = make_unique<Logger>();
 	unique_ptr<int> bankruptCount = make_unique<int>(0);
-	//const variables
 
 	//vectors
 	vector<string> aNames = {};
@@ -1007,7 +1008,6 @@ int main()
 	vector<CCard*> aChanceCards = {};
 	vector<CCard*> aCommunityChestCards = {};
 
-	//game class
 	//initialises the bank, round number, max round number, highest dice roll, lowest dice roll
 	unique_ptr<CGame> cGame = make_unique<CGame>();
 
@@ -1111,8 +1111,8 @@ int main()
 
 	while (cGame->GetMaxRound() > cGame->GetCurrentRound() && *bankruptCount <= (aPlayers.size() - 2))
 	{
-		ioLog->writeToFile("=====================================================================\n");
-		ioLog->writeToFile("			Round " + std::to_string((cGame->GetCurrentRound() + 1)) + "\n");
+		ioLog->writeToFile("=====================================================================");
+		ioLog->writeToFile("				Round " + std::to_string((cGame->GetCurrentRound() + 1)));
 		ioLog->writeToFile("=====================================================================\n");
 
 		playerTurn(cGame, aBoard, aPlayers, aChanceCards, aCommunityChestCards, ioLog, bankruptCount);
