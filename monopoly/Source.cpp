@@ -236,7 +236,7 @@ void OutputPlayers(unique_ptr<CGame>& cGame, vector<CPlayer*>& aPlayers, unique_
 		//position
 		if (aPlayers[*pPlayerNo]->IsBankrupt())
 		{
-			ioLog->writeToFile(" declared BANKRUPT");
+			ioLog->writeToFile("declared BANKRUPT");
 		}
 		ioLog->writeToFile("\n");
 
@@ -1021,6 +1021,7 @@ int main()
 
 	//if files have a specific names that are changed
 
+	system("cls");
 	//read in files
 	
 	*fileName = "config/names.txt";
@@ -1080,21 +1081,28 @@ int main()
 	tileFile.close();
 	cout << "\n";
 	 
-	//pick usernames
-	for (int i = 0; i <= cGame->GetPlayers() - 1; i++)
-	{
-		//
-		CPlayer* playerPtr = new CPlayer;
-		playerPtr->SetValues(cGame);
-		playerName(aNames, playerPtr);
+	try {
+		//pick usernames
+		for (int i = 0; i <= cGame->GetPlayers() - 1; i++)
+		{
+			CPlayer* playerPtr = new CPlayer;
+			playerPtr->SetValues(cGame);
+			playerName(aNames, playerPtr);
 
-		aPlayers.push_back(playerPtr);
+			aPlayers.push_back(playerPtr);
 
-		cout << "Player: " << aPlayers[i]->GetName() << " initialised\n\n";
+			cout << "Player: " << aPlayers[i]->GetName() << " initialised\n\n";
+
+		}
+	}
+	catch (...) {
+		cout << "An unknown error occured. Ending simulation..\n";
+		return 0;
 	}
 	
 	
 	aNames.clear();
+	system("cls");
 
 	//game loop
 	ioLog->writeToFile("=====================================================================\n");
