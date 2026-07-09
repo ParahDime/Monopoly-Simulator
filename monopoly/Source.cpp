@@ -212,6 +212,22 @@ int RNG(int low, int high)
 	return *num;
 }
 
+string GetPositionSuffix(int rank)
+{
+	if (rank >= 11 && rank <= 13) {
+		return std::to_string(rank) + "th";
+	}
+
+	const std::string SUFFIXES[] = { "th", "st", "nd", "rd" };
+
+	int lastDigit = rank % 10;
+
+	//if last digit > 3, return th
+	std::string suffix = (lastDigit <= 3) ? SUFFIXES[lastDigit] : "th";
+
+	return std::to_string(rank) + suffix;
+}
+
 //output each player's total
 void OutputPlayers(unique_ptr<CGame>& cGame, vector<CPlayer*>& aPlayers, unique_ptr<Logger>& ioLog, bool gameEnd)
 {
@@ -232,23 +248,20 @@ void OutputPlayers(unique_ptr<CGame>& cGame, vector<CPlayer*>& aPlayers, unique_
 		ioLog->writeToFile("=====================================================================\n");
 	}
 
+	string position;
+	int rank;
 	for (auto i = aPlayers.begin(); i != aPlayers.end(); i++)
 	{
+		rank = distance(aPlayers.begin(), i) + 1;
+		position = GetPositionSuffix(rank);
 		//output their name and money
-		ioLog->writeToFile(aPlayers[*pPlayerNo]->GetName() + " has " + char(156) + to_string(aPlayers[*pPlayerNo]->GetMoney()));
-		if (!gameEnd)
-		{
-			ioLog->writeToFile("Current position: " +to_string(aPlayers[*pPlayerNo]->GetPosition()) + "\n");
-		}
+		ioLog->writeToFile(position + " " + aPlayers[*pPlayerNo]->GetName() + " balance: " + char(156) + to_string(aPlayers[*pPlayerNo]->GetMoney()));
 		//position
 		if (aPlayers[*pPlayerNo]->IsBankrupt())
 		{
-			ioLog->writeToFile("declared BANKRUPT");
+			ioLog->writeToFile("BANKRUPT");
 		}
 		ioLog->writeToFile("\n");
-
-		//show which player wins
-
 		++*pPlayerNo;
 	}
 }
@@ -337,10 +350,12 @@ void BuildRepairs(vector<CPlayer*>& aPlayers, vector<CCard*>& aCards, vector<CTi
 
 	
 	//finalise cost of repairs
-	ioLog->writeToFile(aPlayers[position]->GetName() + " pays repairs for " + to_string(*pHouses) + " houses and " + to_string(*pHotels) + " hotels.\n");
+	ioLog->writeToFile("[ Repairs ]: " + aPlayers[position]->GetName() + " pays repairs for " + to_string(*pHouses) + " houses and " + to_string(*pHotels) + " hotels.\n");
 	*pHouses = *pHouses * aCards[*pCard]->GetHouseCost();
 	*pHotels = *pHotels * aCards[*pCard]->GetHotelCost();
 
+	ioLog->writeToFile("\n[ Houses: " + to_string(*pHouses));
+	ioLog->writeToFile("[ Hotels ]: " + to_string(*pHotels) + "\n");
 	//add to the total
 	*pHouses += *pHotels;
 	//deduct amount from player for repairs
@@ -395,7 +410,7 @@ void MoveResolve(vector<CCard*>& aCards, vector<CPlayer*>& aPlayers, vector<CTil
 
 	//use player landing again to handle landing (if 1 2 or 3)
 	if (aBoard[*pPosition]->GetType() <= 3) {
-		ioLog->writeToFile(aPlayers[position]->GetName() + " moved to " + aBoard[*pPosition]->GetName() + "\n");
+		ioLog->writeToFile("[Moved]: " + aBoard[*pPosition]->GetName() + "\n");
 	}
 }
 
@@ -485,7 +500,7 @@ void playerLanding(unique_ptr<CGame>& cGame, vector<CTile*>& aBoard, vector<CPla
 	}
 	else
 	{
-		ioLog->writeToFile(aPlayers[position]->GetName() + " is in " + aBoard[aPlayers[position]->GetPosition()]->GetName());
+		ioLog->writeToFile("[ In Jail ]: ");
 	}
 	
 
@@ -579,20 +594,13 @@ void playerLanding(unique_ptr<CGame>& cGame, vector<CTile*>& aBoard, vector<CPla
 				//else if a hotel is already on the property
 				else if (aBoard[aPlayers[position]->GetPosition()]->GetHotels() >= 1)
 				{
-					ioLog->writeToFile("Maximum amount of buildings placed on " + aBoard[aPlayers[position]->GetPosition()]->GetName() + "\n");
+					ioLog->writeToFile("[ Notice ]: Maximum buildings placed on property");
 				}
 				else
 				{
 
-				}
-				//put a house down on the property
-				
+				}				
 			}
-			//nothing happens
-		}
-		else
-		{
-
 		}
 		break;
 	case 2:
@@ -620,10 +628,6 @@ void playerLanding(unique_ptr<CGame>& cGame, vector<CTile*>& aBoard, vector<CPla
 			aBoard[aPlayers[position]->GetPosition()]->PayBill(cGame, aBoard, aPlayers, position, pDieRoll, pUtilityOwned, ioLog);
 		}
 		//else if not enough money to pay OR owned by the player
-		else
-		{
-			//nothing happens
-		}
 
 		break;
 	case 3:
@@ -648,24 +652,19 @@ void playerLanding(unique_ptr<CGame>& cGame, vector<CTile*>& aBoard, vector<CPla
 
 			aBoard[aPlayers[position]->GetPosition()]->PayFare(cGame, aBoard, aPlayers, position, pStationOwned, ioLog);//pay rent
 		}
-		else
-		{
-			//nothing happens
-		}
 		break;
 	case 4:
 		//player lands on a go tile
 		//nothing happens
 		break;
-	case 5:
+	case 5: //player lands on a jail tile
 		if (aPlayers[position]->GetJailCounter() == 0)
 		{
 			aBoard[aPlayers[position]->GetPosition()]->PassingJail(aPlayers, position, ioLog);
 		}
-		//player lands on a jail tile
+		
 		break;
-	case 6:
-		//player lands on go to jail
+	case 6: //player lands on go to jail
 		aBoard[aPlayers[position]->GetPosition()]->GoToJail(cGame, aBoard, aPlayers, position, ioLog);
 		break;
 	case 7:
@@ -675,9 +674,10 @@ void playerLanding(unique_ptr<CGame>& cGame, vector<CTile*>& aBoard, vector<CPla
 		
 		break;
 	case 8:
+		//player lands on community chest
 		ioLog->writeToFile(aPlayers[position]->GetName() + " picks a community chest card\n");
 		ResolveCard(aCommunityChest, aPlayers, aBoard, cGame, position, ioLog);
-		//player lands on community chest
+		
 		break;
 	case 9:
 		//player lands on free parking
@@ -689,7 +689,7 @@ void playerLanding(unique_ptr<CGame>& cGame, vector<CTile*>& aBoard, vector<CPla
 		break;
 
 	default:
-		ioLog->writeToFile("Tile not specified\n");
+		ioLog->writeToFile("[ Error]: Tile not specified\n");
 		break;
 	}
 }
@@ -701,6 +701,7 @@ void playerTurn(unique_ptr<CGame>& cGame, vector<CTile*>& aBoard, vector<CPlayer
 {
 	//holds the dice number
 	unique_ptr<int> pDieRoll = make_unique<int>(0);
+	unique_ptr<int> pSecondDie = make_unique<int>();
 
 	for (int i = 0; i < cGame->GetPlayers(); i++)
 	{
@@ -716,30 +717,12 @@ void playerTurn(unique_ptr<CGame>& cGame, vector<CTile*>& aBoard, vector<CPlayer
 				*pDieRoll = cGame->rollDice();
 			}
 
-			//if value is 1
+			//if value is 1 and one die
 			else if (aPlayers[i]->GetJailCounter() == 1)
 			{
-				//if player rolls a six
-				if (cGame->rollDice() >= 4)
+				if (cGame->rollDice() == 6 && cGame->GetDiceNo() == 1)
 				{
-					ioLog->writeToFile(aPlayers[i]->GetName() + " got lucky and left jail early\n");
-					//pay fine
-					aPlayers[i]->TakeMoney(50, cGame);
-					//get out of prison
-					aPlayers[i]->SetJailCounter(0);
-
-					*pDieRoll = cGame->rollDice();
-				}
-				else //else player waits a turn
-				{
-					aPlayers[i]->PassTurn();
-				}
-			}
-			else //if value is higher than 1
-			{
-				if (cGame->rollDice() == 6)
-				{
-					ioLog->writeToFile(aPlayers[i]->GetName() + "got lucky and left jail early\n");
+					ioLog->writeToFile("[ Max Roll ]: " + aPlayers[i]->GetName() + " left jail early\n");
 					//pay fine
 					aPlayers[i]->TakeMoney(50, cGame);
 					//get out of prison
@@ -752,11 +735,30 @@ void playerTurn(unique_ptr<CGame>& cGame, vector<CTile*>& aBoard, vector<CPlayer
 					//pay turn
 					aPlayers[i]->PassTurn();
 				}
+			}
+			else //if value is higher than 1 and 2 dice
+			{
+				*pDieRoll = cGame->rollDice();
+				*pSecondDie = cGame->rollDice();
+				//if player rolls a six
+				if (*pDieRoll == *pSecondDie)
+				{
+					ioLog->writeToFile("[ Doubles ]: " + aPlayers[i]->GetName() + " left jail early\n");
+					//pay fine
+					aPlayers[i]->TakeMoney(50, cGame);
+					//get out of prison
+					aPlayers[i]->SetJailCounter(0);
+
+					*pDieRoll = cGame->rollDice();
+				}
+				else //else player waits a turn
+				{
+					aPlayers[i]->PassTurn();
+				}
 
 				//drop to zero
 			}
-
-			unique_ptr<int> pSecondDie = make_unique<int>();
+			
 			unique_ptr<int> pTotalRoll = make_unique<int>();
 
 			//if player selected 2 die
@@ -769,7 +771,7 @@ void playerTurn(unique_ptr<CGame>& cGame, vector<CTile*>& aBoard, vector<CPlayer
 				{
 					*pDieRoll += *pSecondDie;
 
-					ioLog->writeToFile("DOUBLE " + to_string(*pSecondDie) + "!\n " + aPlayers[i]->GetName() + "rolled 2 " + to_string(*pSecondDie) + "s. " + aPlayers[i]->GetName() + " gets to roll again\n");
+					ioLog->writeToFile("[ DOUBLE ]: rolled 2 " + to_string(*pSecondDie) + "! Roll again\n");
 
 					//rolls the die again
 					*pSecondDie = cGame->rollDice();
@@ -781,7 +783,7 @@ void playerTurn(unique_ptr<CGame>& cGame, vector<CTile*>& aBoard, vector<CPlayer
 					//if doubles a second time
 					if (*pSecondDie == *pThirdDie)
 					{
-						ioLog->writeToFile("DOUBLES again, rolled 2 " + to_string(*pSecondDie) + "! Roll one more time. If " + aPlayers[i]->GetName() + " rolls doubles again they will move to jail\n");
+						ioLog->writeToFile("[ DOUBLES again ]:  rolled 2 " + to_string(*pSecondDie) + "! Roll doubles again and move to jail\n");
 
 						*pSecondDie = cGame->rollDice();
 						*pThirdDie = cGame->rollDice();
@@ -790,7 +792,7 @@ void playerTurn(unique_ptr<CGame>& cGame, vector<CTile*>& aBoard, vector<CPlayer
 
 						//if doubles a third time
 						if (*pSecondDie == *pThirdDie)
-							ioLog->writeToFile("DOUBLES again, rolled 2 " + to_string(*pSecondDie) + "! " + aPlayers[i]->GetName() + " goes straight to jail");
+							ioLog->writeToFile("[ DOUBLES again ]: rolled 2 " + to_string(*pSecondDie) + "! " + aPlayers[i]->GetName() + " goes straight to jail");
 						{
 							//for every tile on the board
 							for (auto const& it : aBoard)
@@ -844,7 +846,7 @@ void playerTurn(unique_ptr<CGame>& cGame, vector<CTile*>& aBoard, vector<CPlayer
 			//check if player has minus money
 			if (aPlayers[i]->GetMoney() <= 0)
 			{
-				ioLog->writeToFile(aPlayers[i]->GetName() + " has no money left and wil have to mortgage properties\n");
+				ioLog->writeToFile("[ No Cash ]: " + aPlayers[i]->GetName() + " will have to mortgage properties\n");
 
 				for (auto const& it : aBoard)
 				{
@@ -866,8 +868,7 @@ void playerTurn(unique_ptr<CGame>& cGame, vector<CTile*>& aBoard, vector<CPlayer
 				//if already mortgaged all of them, reset properties owned by them, set stats to zero / delete
 				if (aPlayers[i]->GetMoney() < 0)
 				{
-					ioLog->writeToFile(aPlayers[i]->GetName() + " has no money left after mortgaging their properties\n");
-					ioLog->writeToFile(aPlayers[i]->GetName() + " is declared bankrupt!\n");
+					ioLog->writeToFile("[ BANKRUPT ]: No money left after mortgaging properties\n");
 					(*bankruptCount)++;
 
 					//cycle through all tiles
