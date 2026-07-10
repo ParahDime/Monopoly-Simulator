@@ -85,7 +85,13 @@ bool VerifyCustomisation(unique_ptr<CGame>& cGame, unique_ptr<Logger>& ioLog)
 	ioLog->writeToFile("[+] Difficulty: " + cGame->GetDifficulty());
 	ioLog->writeToFile("[+] Number of dice used: " + to_string(cGame->GetDiceNo()));
 	ioLog->writeToFile("[+] Number of dice sides: " + to_string(cGame->GetHighRoll()) + "\n");
-	ioLog->writeToFile("[+] User Playing: " + to_string(cGame->isPlaying()));
+	if (cGame->isPlaying()) {
+		ioLog->writeToFile("[+] User Playing: True");
+	}
+	else
+	{
+		ioLog->writeToFile("[+] User Playing: False");
+	}
 	
 	ioLog->writeToFile("=====================================================================\n");
 	
@@ -902,7 +908,9 @@ void playerTurn(unique_ptr<CGame>& cGame, vector<CTile*>& aBoard, vector<CPlayer
 				if (aPlayers[i]->GetPosition() >= aBoard.size())
 				{
 					//player has lapped the board, and removes the board size from position counter
-					aPlayers[i]->BoardLap(aBoard.size());
+					do {
+						aPlayers[i]->BoardLap(aBoard.size());
+					} while (aPlayers[i]->GetPosition() >= aBoard.size());
 
 					//if the first player laps the board
 					if (i == 0)
@@ -916,7 +924,6 @@ void playerTurn(unique_ptr<CGame>& cGame, vector<CTile*>& aBoard, vector<CPlayer
 					}
 					unique_ptr <string>LapBoard = make_unique<string>("[ Lapped Board ]:  Collected ");
 					ioLog->writeToFile(*LapBoard + char(156) + to_string(cGame->GetGoMoney()));
-
 				}
 
 				//head to player landing to see where player landed
@@ -925,7 +932,7 @@ void playerTurn(unique_ptr<CGame>& cGame, vector<CTile*>& aBoard, vector<CPlayer
 				//check if player has minus money
 				if (aPlayers[i]->GetMoney() <= 0)
 				{
-					ioLog->writeToFile("[ No Cash ]: " + aPlayers[i]->GetName() + " will have to mortgage properties\n");
+					ioLog->writeToFile("[ No Cash ]: To Mortgage properties");
 
 					for (auto const& it : aBoard)
 					{
@@ -933,13 +940,12 @@ void playerTurn(unique_ptr<CGame>& cGame, vector<CTile*>& aBoard, vector<CPlayer
 						if (aBoard[aPlayers[i]->GetPosition()]->GetOwner() == i)
 						{
 							aBoard[i]->MortgageTile(cGame, aPlayers, i);//mortgage the property
-
 						}
 
 						//if player has more than 0, break
 						if (aPlayers[i]->GetMoney() > 0)
 						{
-							//if yes, mortgage properties until balance is above zero
+							cout << "Properties recovered";
 							break;
 						}
 					}

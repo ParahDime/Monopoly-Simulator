@@ -6,7 +6,7 @@ CGame::CGame()
     mHigh = 6;
     mCurrentRound = 0;
     mTileOwned = 0;
-    mMaxRound = 10;
+    mMaxRound = 50;
     mPlayers = 4; //no of players
     mDiceNo = 2;
     mMultiplier = 2; //difficulty used
