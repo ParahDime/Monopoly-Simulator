@@ -24,6 +24,10 @@ int CPlayer::GetMoney()
 	return mMoney;
 }
 
+void CPlayer::GetParkingMoney(int money) {
+	mMoney += money;
+}
+
 void CPlayer::GiveMoney(int money, unique_ptr<CGame>& cGame)
 {
 	mMoney += money;
@@ -115,7 +119,7 @@ bool CPlayer::DecidesToBuy(int propertyCost)
 
 void CPlayer::SetValues(unique_ptr<CGame>& cGame)
 {
-	mMoney = 1500;
+	mMoney = cGame->GetPlayerMoney();
 	mPosition = 0;
 	mJailCounter = 0;
 	mJailCard = false;

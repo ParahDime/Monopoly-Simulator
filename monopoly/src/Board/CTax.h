@@ -12,6 +12,7 @@ public:
     ~CTax();
 
     void PayTax(unique_ptr<CGame>& cGame, vector<CPlayer*>& aPlayers, int position, unique_ptr<Logger>& ioLog);
+    int GetTax();
 
     friend istream& operator >> (istream& inputStream, CTax& tax);
 };

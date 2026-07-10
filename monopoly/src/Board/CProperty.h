@@ -41,6 +41,6 @@ public:
     friend istream& operator >> (istream& inputStream, CProperty& cProperty);
     bool isMortgaged();
     void MortgageTile(unique_ptr<CGame>& cGame, vector<CPlayer*>& aPlayers, int& position);
-    void PayMortgageTile(unique_ptr<CGame>& cGame, vector<CPlayer*>& aPlayers, int& position);
+    void PayMortgageTile(unique_ptr<CGame>& cGame, vector<CPlayer*>& aPlayers, int& position, unique_ptr<Logger>& ioLog);
 };
 

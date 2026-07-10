@@ -13,15 +13,12 @@ CStation::~CStation()
 
 void CStation::BuyProperty(unique_ptr<CGame>& cGame, vector<CPlayer*>& aPlayers, int& position, unique_ptr<Logger>& ioLog)
 {
-	ioLog->writeToFile(aPlayers[position]->GetName() + " buys " + mName + " for " + char(156) + to_string(mPrice) + "\n");
+	ioLog->writeToFile("\n[ Station Bought ]: \n[ Name ]: " + mName + "\n[ Price ]: " + char(156) + to_string(mPrice) + "\n");
 
 	mOwner = position;
 
 	//player pays money
 	aPlayers[position]->TakeMoney(mPrice, cGame);
-	//bank gains money
-
-
 }
 
 void CStation::PayFare(unique_ptr<CGame>& cGame, vector<CTile*>& aBoard, vector<CPlayer*>& aPlayers, int& position, unique_ptr<int>& pTypeOwned, unique_ptr<Logger>& ioLog)
@@ -36,10 +33,10 @@ void CStation::PayFare(unique_ptr<CGame>& cGame, vector<CTile*>& aBoard, vector<
 		*mTotalRent *= cGame->GetMultiplier();
 	}
 
-	ioLog->writeToFile(aPlayers[position]->GetName() + " pays " + char(156) + to_string(*mTotalRent) + " to " + aPlayers[mOwner]->GetName() + "\n");
+	ioLog->writeToFile("\n[ Rent ] \n[ Landlord ]: " + aPlayers[mOwner]->GetName() + "\n[ Tenant ]: " + aPlayers[position]->GetName() + "\n[ Amount ]: " + char(156) + to_string(*mTotalRent) + "\n");
 	//pay money
 	aPlayers[position]->TakeMoney(*mTotalRent, cGame);
-	aPlayers[mOwner]->TakeMoney(*mTotalRent, cGame);
+	aPlayers[mOwner]->GiveMoney(*mTotalRent, cGame);
 }
 
 int CStation::GetOwner()

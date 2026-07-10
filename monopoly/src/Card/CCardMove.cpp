@@ -98,5 +98,21 @@ istream& operator>>(istream& inputStream, CCardMove& cCardMove)
 		inputStream >> cCardMove.mTyping;
 	}
 
+	if (!cCardMove.mNaming.empty()) {
+		// 1. Shave off trailing spaces/tabs/newlines from the back
+		while (!cCardMove.mNaming.empty() && std::isspace(static_cast<unsigned char>(cCardMove.mNaming.back()))) {
+			cCardMove.mNaming.pop_back();
+		}
+
+		// 2. Shave off leading spaces/tabs/newlines from the front
+		size_t startPos = 0;
+		while (startPos < cCardMove.mNaming.length() && std::isspace(static_cast<unsigned char>(cCardMove.mNaming[startPos]))) {
+			startPos++;
+		}
+		if (startPos > 0) {
+			cCardMove.mNaming.erase(0, startPos);
+		}
+	}
+
 	return inputStream;
 }

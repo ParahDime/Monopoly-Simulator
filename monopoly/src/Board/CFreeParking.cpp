@@ -9,7 +9,12 @@ CFreeParking::~CFreeParking()
 {
 }
 
-void CFreeParking::OutputText(vector<CPlayer*>& aPlayers, int position, unique_ptr<Logger>& ioLog)
+void CFreeParking::OutputText(vector<CPlayer*>& aPlayers, int position, unique_ptr<Logger>& ioLog, bool Collection)
 {
-	ioLog->writeToFile(aPlayers[position]->GetName() + " is resting.\n");
+	if (!Collection) {
+		ioLog->writeToFile("[ Free Parking ]: " + aPlayers[position]->GetName() + " is resting.\n");
+	}
+	else {
+		ioLog->writeToFile("[ Free Parking ] \nCollect fines \n[ Amount ]: "); //collect fines from tax, fines etc
+	}
 }

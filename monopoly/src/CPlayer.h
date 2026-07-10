@@ -21,6 +21,7 @@ public:
 	void SetName(string name);
 	string GetName();
 
+	void GetParkingMoney(int money);
 	int GetMoney();
 	void GiveMoney(int money, unique_ptr<CGame>& cGame);
 	void TakeMoney(int money, unique_ptr<CGame>& cGame);

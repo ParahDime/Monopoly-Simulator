@@ -93,6 +93,9 @@
     <ClInclude Include="src\Personality.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="json.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\CGame.cpp">
@@ -184,8 +187,6 @@
     </Text>
   </ItemGroup>
   <ItemGroup>
-    <None Include="houserules.json">
-      <Filter>Resource Files</Filter>
-    </None>
+    <None Include="src\houserules.json" />
   </ItemGroup>
 </Project>

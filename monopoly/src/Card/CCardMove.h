@@ -6,7 +6,7 @@ class CCardMove :
 private:
     bool isSpecific = false;
     int mTyping = 0; //specific type
-    string mNaming = " "; //specific name
+    string mNaming; //specific name
 public:
     CCardMove(istream& file);
     ~CCardMove();

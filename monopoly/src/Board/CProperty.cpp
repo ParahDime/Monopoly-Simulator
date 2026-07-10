@@ -88,7 +88,7 @@ void CProperty::SetHouses(vector<CPlayer*>& aPlayers, unique_ptr<CGame>& cGame, 
 			aPlayers[position]->TakeMoney(*pHousePrice, cGame);
 			mHouses++;
 			UpdateRent();
-			ioLog->writeToFile(aPlayers[position]->GetName() + " has added a house to " + mName + "\n");
+			ioLog->writeToFile("[ House Added ]: " + mName + "\n");
 		}
 		else { //if player doesn't have enough money
 			ioLog->writeToFile(aPlayers[position]->GetName() + " does not have enough money to add to their property\n");
@@ -118,22 +118,23 @@ void CProperty::SetHotels(vector<CPlayer*>& aPlayers, unique_ptr<CGame>& cGame, 
 		if (aPlayers[position]->GetMoney() >= *pHotelPrice) //if player has enough to purchase
 		{
 			aPlayers[position]->TakeMoney(*pHotelPrice, cGame);
+			ioLog->writeToFile("[ Hotel added ]: " + mName);
 			mHotel = true;
 			UpdateRent();
 		}
 		else
 		{
-			ioLog->writeToFile(aPlayers[position]->GetName() + " does not have enough to add to their property\n");
+			ioLog->writeToFile("[ Insufficient Funds ]: Cannot add building");
 		}
 
 	}
 	else if (mHotel == 1) //if hotel
 	{
-		ioLog->writeToFile(aPlayers[position]->GetName() + " cannot add to their property\n");
+		ioLog->writeToFile("[ Already Exists]: Building cannot be added");
 	}
 	else //hotel already added 
 	{
-		ioLog->writeToFile(aPlayers[position]->GetName() + " cannot add to their property\n");
+		ioLog->writeToFile("[ Already Exists]: Building cannot be added");
 	}
 }
 
@@ -149,13 +150,13 @@ void CProperty::ResetTile()
 
 void CProperty::BuyProperty(unique_ptr<CGame>& cGame, vector<CPlayer*>& aPlayers, int& position, unique_ptr<Logger>& ioLog)
 {
-	ioLog->writeToFile(aPlayers[position]->GetName() + " buys " + mName + " for " + char(156) + to_string(mPrice) + "\n");
+	//property bought
+	ioLog->writeToFile("\n[ Property Bought ] \n[ Name ]: " + mName + "\n[ Price ]: " + char(156) + to_string(mPrice) + "\n[ Colour ]: " + mGroup + "\n");
 
 	mOwner = position;
 
 	//player pays money
 	aPlayers[position]->TakeMoney(mPrice, cGame);
-	//bank gains money
 }
 
 void CProperty::PayRent(unique_ptr<CGame>& cGame, vector<CPlayer*>& aPlayers, int position, unique_ptr<Logger>& ioLog)
@@ -179,7 +180,8 @@ void CProperty::PayRent(unique_ptr<CGame>& cGame, vector<CPlayer*>& aPlayers, in
 	}
 
 
-	ioLog->writeToFile(aPlayers[position]->GetName() + " paid " + char(156) + to_string(*mTotalRent) + " to " + aPlayers[mOwner]->GetName() + "\n");
+	//ioLog->writeToFile(aPlayers[position]->GetName() + " paid " + char(156) + to_string(*mTotalRent) + " to " + aPlayers[mOwner]->GetName() + "\n");
+	ioLog->writeToFile("\n[ Rent ] \n[ Landlord ]: " + aPlayers[mOwner]->GetName() + "\n[ Tenant ]: " + aPlayers[position]->GetName() + "\n[ Amount ]: " + char(156) + to_string(*mTotalRent) + "\n");
 }
 
 
@@ -202,11 +204,12 @@ void CProperty::MortgageTile(unique_ptr<CGame>& cGame, vector<CPlayer*>& aPlayer
 
 }
 
-void CProperty::PayMortgageTile(unique_ptr<CGame>& cGame, vector<CPlayer*>& aPlayers, int& position)
+void CProperty::PayMortgageTile(unique_ptr<CGame>& cGame, vector<CPlayer*>& aPlayers, int& position, unique_ptr<Logger>& ioLog)
 {
 	//unmortgage the property
 	mMortgage = false;
 	aPlayers[position]->TakeMoney(mPrice * 1.1, cGame);
+	ioLog->writeToFile("[ Mortgage Paid ]");
 }
 
 istream& operator>>(istream& inputStream, CProperty& cProperty)

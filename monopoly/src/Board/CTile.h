@@ -43,9 +43,10 @@ public:
 
 	virtual void GoToJail(unique_ptr<CGame>& cGame, vector<CTile*>& aBoard, vector<CPlayer*>& aPlayers, int& position, unique_ptr<Logger>& ioLog);
 
-	virtual void OutputText(vector<CPlayer*>& aPlayers, int position, unique_ptr<Logger>& ioLog); //free parking ( 9
+	virtual void OutputText(vector<CPlayer*>& aPlayers, int position, unique_ptr<Logger>& ioLog, bool Collection); //free parking ( 9
 
 	virtual void PayTax(unique_ptr<CGame>& cGame, vector<CPlayer*>& aPlayers, int position, unique_ptr<Logger>& ioLog);
+	virtual int GetTax();
 
 	friend istream& operator >> (istream& inputStream, CTile& aBoard);
 	friend ostream& operator << (ostream& outputStream, CTile& aBoard);

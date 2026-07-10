@@ -31,13 +31,18 @@ void CTile::ResetTile()
 {
 }
 
-void CTile::OutputText(vector<CPlayer*>& aPlayers, int position, unique_ptr<Logger>& ioLog)
+void CTile::OutputText(vector<CPlayer*>& aPlayers, int position, unique_ptr<Logger>& ioLog, bool Collection)
 {
-	//cout << "Player has landed on a tile. Do nothing for one turn\n";
+
 }
 
 void CTile::PayTax(unique_ptr<CGame>& cGame, vector<CPlayer*>& aPlayers, int position, unique_ptr<Logger>& ioLog)
 {
+}
+
+int CTile::GetTax()
+{
+	return int(0);
 }
 
 void PayRent(unique_ptr<CGame>& cGame, vector<CPlayer*>& aPlayers, int position)

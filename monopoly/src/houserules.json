@@ -1,0 +1,9 @@
+{
+	"Dice": 2,
+	"Sides": 12,
+	"ParkingCollect": true,
+	"Players": 6,
+	"Difficulty": 3,
+	"Bank": 20000,
+	"Rounds": 100
+}

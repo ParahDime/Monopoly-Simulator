@@ -11,7 +11,7 @@ public:
     CFreeParking(istream& file);
     ~CFreeParking();
 
-    void OutputText(vector<CPlayer*>& aPlayers, int position, unique_ptr<Logger>& ioLog);
+    void OutputText(vector<CPlayer*>& aPlayers, int position, unique_ptr<Logger>& ioLog, bool Collection);
 
 };
 

@@ -13,13 +13,12 @@ CUtility::~CUtility()
 
 void CUtility::BuyProperty(unique_ptr<CGame>& cGame, vector<CPlayer*>& aPlayers, int& position, unique_ptr<Logger>& ioLog)
 {
-	ioLog->writeToFile(aPlayers[position]->GetName() + " buys " + mName + " for " + char(156) + to_string(mPrice) + "\n");
+	ioLog->writeToFile("\n[ Utility Bought ]\n[ Name ]: " + mName + "\n[ Price ]: " + char(156) + to_string(mPrice) + "\n");
 
 	mOwner = position;
 
 	//player pays money
 	aPlayers[position]->TakeMoney(mPrice, cGame);
-	//bank gains money
 }
 
 void CUtility::MortgageTile(unique_ptr<CGame>& cGame, vector<CPlayer*>& aPlayers, int& position)
@@ -57,7 +56,7 @@ void CUtility::PayBill(unique_ptr<CGame>& cGame, vector<CTile*>& aBoard, vector<
 		*pDieRoll *= cGame->GetMultiplier();
 	}
 
-	ioLog->writeToFile(aPlayers[position]->GetName() + " pays " + char(156) + to_string(*pDieRoll) + " to " + aPlayers[mOwner]->GetName() + "\n");
+	ioLog->writeToFile("\n[ Rent ]\n[ Owner ]: " + aPlayers[mOwner]->GetName() + "\n[ Tenant ]: " + aPlayers[position]->GetName() + "[ Amount ]: " + char(156) + to_string(*pDieRoll));
 	//pay money
 	aPlayers[position]->TakeMoney(*pDieRoll, cGame);
 	aPlayers[mOwner]->TakeMoney(*pDieRoll, cGame);

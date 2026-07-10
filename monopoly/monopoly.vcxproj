@@ -143,6 +143,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="json.hpp" />
     <ClInclude Include="src\Logger.h" />
     <ClInclude Include="src\Board\CChance.h" />
     <ClInclude Include="src\Board\CChest.h" />
@@ -206,7 +207,7 @@
     <Text Include="config\Names.txt" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="houserules.json" />
+    <None Include="src\houserules.json" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

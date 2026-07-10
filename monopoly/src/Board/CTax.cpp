@@ -13,12 +13,18 @@ CTax::~CTax()
 
 void CTax::PayTax(unique_ptr<CGame>& cGame, vector<CPlayer*>& aPlayers, int position, unique_ptr<Logger>& ioLog)
 {
-	ioLog->writeToFile(aPlayers[position]->GetName() + " pays " + char(156) + to_string(mPrice) + " in tax.\n");
+	unique_ptr<string> Tax = make_unique<string>("\n[ Tax ] \n[ Amount ]: ");
+	ioLog->writeToFile(*Tax + char(156) + to_string(mPrice));
 	//lose money
 	aPlayers[position]->TakeMoney(mPrice, cGame);
 	//bank gains money
 	cGame->BankTotalGain(mPrice);
 
+}
+
+int CTax::GetTax()
+{
+	return mPrice;
 }
 
 istream& operator >> (istream& inputStream, CTax& tax)

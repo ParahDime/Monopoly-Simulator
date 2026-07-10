@@ -6,10 +6,12 @@ CGame::CGame()
     mHigh = 6;
     mCurrentRound = 0;
     mTileOwned = 0;
-    mMaxRound = 1;
+    mMaxRound = 10;
     mPlayers = 4; //no of players
-    mDiceNo = 1;
+    mDiceNo = 2;
     mMultiplier = 2; //difficulty used
+    mGoMoney = 200;
+    mParking = false; //handles free money at parking
 }
 
 
@@ -74,6 +76,22 @@ void CGame::SetPlayers(int players)
     mPlayers = players;
 }
 
+int CGame::GetPlayerMoney()
+{
+    switch (mMultiplier)
+    {
+    case 1:
+        return 1800;
+        break;
+    case 2:
+        return 1500;
+        break;
+    case 3:
+        return 1000;
+        break;
+    }
+}
+
 int CGame::GetPlayers()
 {
     return mPlayers;
@@ -126,12 +144,17 @@ void CGame::BankTotalGain(int money)
     mBank += money;
 }
 
+void CGame::SetBank(int money)
+{
+    mBank = money;
+}
+
 void CGame::BankTotalLose(int money)
 {
     mBank -= money;
 }
 
-int CGame::GetGoMoney(int i)
+int CGame::GetGoMoney()
 {
     int GoMoney;
     switch (mMultiplier)
@@ -153,9 +176,9 @@ int CGame::GetGoMoney(int i)
     return GoMoney;
 }
 
-int CGame::GetGoMoney()
+void CGame::SetGoMoney(int money)
 {
-    return mGoMoney;
+    money = mGoMoney;
 }
 
 int CGame::GetMultiplier()
@@ -184,7 +207,42 @@ bool CGame::isPlaying()
 }
 
 //used to allow user to play
-void CGame::setPlaying()
+void CGame::setPlaying(bool playing)
 {
-    mPlaying = true;
+    mPlaying = playing;
+}
+
+void CGame::SetParkingRule(bool parking)
+{
+    mParking = parking;
+}
+
+bool CGame::GetParkingRule()
+{
+    return mParking;
+}
+
+int CGame::GetParkingMoney()
+{
+    return mParkingAmount;
+}
+
+void CGame::SetParkingMoney(int money)
+{
+    mParkingAmount += money;
+}
+
+void CGame::ResetParking()
+{
+    mParkingAmount = 0;
+}
+
+bool CGame::GetHouseRules()
+{
+    return mHouseRules;
+}
+
+void CGame::SetHouseRules()
+{
+    mHouseRules = true;
 }

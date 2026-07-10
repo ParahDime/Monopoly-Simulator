@@ -27,7 +27,7 @@ void CCard::SetText(string tText)
 
 void CCard::GetText(unique_ptr<Logger>& ioLog)
 {
-	ioLog->writeToFile(mName);
+	ioLog->writeToFile("[ Text ]: " + mName + "\n");
 }
 
 void CCard::SetMoney()

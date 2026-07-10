@@ -4,7 +4,7 @@ class CGame
 {
 private:
 	int mBank; //value of 40k
-	int mGoMoney = 200; //to be set by the tile
+	int mGoMoney; //to be set by the tile
 	int mCurrentRound;
 	int mMaxRound;
 	int mPlayers; //no of players
@@ -14,7 +14,12 @@ private:
 
 	int mMaxTiles; //the maximum amount of tiles that are on the board that can be bought
 	int mTileOwned; //the amount of tiles owned by players
+	bool mParking = false; //bool if money is given on free parking
+	int mParkingAmount = 0;
+
 	bool mPlaying = false; // determines if player1 is playing
+	bool mHouseRules = false;
+
 public:
 	CGame();
 	~CGame();
@@ -32,6 +37,7 @@ public:
 
 	int GetPlayers();
 	void SetPlayers(int players);
+	int GetPlayerMoney();
 
 	int GetLowRoll();
 	int GetHighRoll();
@@ -42,15 +48,27 @@ public:
 
 	int rollDice(); //roll the dice, return number
 
+	void SetBank(int money);
 	void BankTotalLose(int money);
 	void BankTotalGain(int money);
 
-	int GetGoMoney(int i);
+	void SetGoMoney(int i);
 	int GetGoMoney();
 
 	int GetMultiplier(); //requires 
 
 	bool isPlaying();
-	void setPlaying();
+	void setPlaying(bool playing);
+
+	void SetParkingRule(bool parking);
+	bool GetParkingRule();
+
+	int GetParkingMoney();
+	void SetParkingMoney(int money);
+	void ResetParking();
+
+	bool GetHouseRules();
+	void SetHouseRules();
+	
 };
 
