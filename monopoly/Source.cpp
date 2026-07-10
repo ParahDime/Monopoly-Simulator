@@ -592,83 +592,81 @@ void playerLanding(unique_ptr<CGame>& cGame, vector<CTile*>& aBoard, vector<CPla
 					cout << "Not enough money to buy the property\n";
 				}
 			}
-		//if property is not owned by the player
-		else if (aBoard[aPlayers[position]->GetPosition()]->GetOwner() != position || aBoard[aPlayers[position]->GetPosition()]->GetOwner() != -1)
-		{
-			//counts the number of properties in the same group
-			unique_ptr<int> pGroupOwned = make_unique<int>(0);
+			//else if it is owned by the player
+			else if (aBoard[aPlayers[position]->GetPosition()]->GetOwner() == position)
+			{
+				//put house on the property
+				unique_ptr<int> counter = make_unique<int>();
+				unique_ptr<bool> allTrue = make_unique<bool>();
 
-			//for loop to find how many are owned by player who owns the tile
-				for (auto const& it : aBoard)
+				//if mortgaged, AND player has more money than unmortgage price
+				if ((aBoard[aPlayers[position]->GetPosition()]->IsMortgaged())
+					&& (aPlayers[position]->GetMoney() >= aBoard[aPlayers[position]->GetPosition()]->GetPrice() * 1.1))
 				{
-					//if the group is the same as the tile landed on
-					//AND owned by the same player
-					if (it->GetGroup() == aBoard[aPlayers[position]->GetPosition()]->GetGroup() && it->GetOwner() == aBoard[aPlayers[position]->GetPosition()]->GetOwner())
+					aBoard[aPlayers[position]->GetPosition()]->PayMortgageTile(cGame, aPlayers, position, ioLog);
+				}
+
+				*allTrue = true;
+				//set to the last 5 (10, if 11, etc)
+
+				//find the buildings that are min 5 ahead
+				for (int i = *counter; i > *counter + 5; i++)
+				{
+					//if type = 1 and colour is same as tile on
+					if ((aBoard[aPlayers[position]->GetPosition()]->GetType() == 1)
+						&& (aBoard[aPlayers[position]->GetPosition()]->GetOwner() != position))
 					{
-						++* pGroupOwned;
+						*allTrue = false;
+						break;
 					}
-					//if type = utility and owner of that tile also owns this tile
+					else {
+						//is either not equal to 1, or owner is the player (would return true)
+					}
 				}
 
-				aBoard[aPlayers[position]->GetPosition()]->PayRent(cGame, aPlayers, position, ioLog);
+				if (*allTrue == true) //if all properties are owned by the player
+				{
+					//if no of houses is less than 4 and no hotel
+					if (aBoard[aPlayers[position]->GetPosition()]->GetHouses() < 4
+						&& aBoard[aPlayers[position]->GetPosition()]->GetHotels() < 1)
+					{
+						//check if player can afford to place a house
+						aBoard[aPlayers[position]->GetPosition()]->SetHouses(aPlayers, cGame, position, ioLog);
+					}
+					//else if no of houses is equal to 4
+					else if (aBoard[aPlayers[position]->GetPosition()]->GetHouses() >= 4)
+					{
+						//check if player can afford to place a hotel down
+						aBoard[aPlayers[position]->GetPosition()]->SetHotels(aPlayers, cGame, position, ioLog);
+					}
+					//else if a hotel is already on the property
+					else if (aBoard[aPlayers[position]->GetPosition()]->GetHotels() >= 1)
+					{
+						ioLog->writeToFile("[ Notice ]: Maximum buildings placed on property");
+					}
+					else
+					{
 
-		}
-		//else if it is owned by the player
-		else if (aBoard[aPlayers[position]->GetPosition()]->GetOwner() == position)
-		{
-			//put house on the property
-			unique_ptr<int> counter = make_unique<int>();
-			unique_ptr<bool> allTrue = make_unique<bool>();
-			
-			//if mortgaged, AND player has more money than unmortgage price
-			if ((aBoard[aPlayers[position]->GetPosition()]->IsMortgaged())
-				&& (aPlayers[position]->GetMoney() >= aBoard[aPlayers[position]->GetPosition()]->GetPrice() * 1.1))
+					}
+				}
+			//if property is not owned by the player
+			else if (aBoard[aPlayers[position]->GetPosition()]->GetOwner() != position || aBoard[aPlayers[position]->GetPosition()]->GetOwner() != -1)
 			{
-				aBoard[aPlayers[position]->GetPosition()]->PayMortgageTile(cGame, aPlayers, position, ioLog);
-			}
+				//counts the number of properties in the same group
+				unique_ptr<int> pGroupOwned = make_unique<int>(0);
 
-			*allTrue = true;
-			//set to the last 5 (10, if 11, etc)
-			
-			//find the buildings that are min 5 ahead
-			for (int i = *counter; i > *counter + 5; i++)
-			{
-				//if type = 1 and colour is same as tile on
-				if ((aBoard[aPlayers[position]->GetPosition()]->GetType() == 1) 
-					&& (aBoard[aPlayers[position]->GetPosition()]->GetOwner() != position))
-				{
-					*allTrue = false;
-					break;
-				}
-				else {
-					//is either not equal to 1, or owner is the player (would return true)
-				}
-			}
-
-			if (*allTrue == true) //if all properties are owned by the player
-			{
-				//if no of houses is less than 4 and no hotel
-				if (aBoard[aPlayers[position]->GetPosition()]->GetHouses() < 4 
-					&& aBoard[aPlayers[position]->GetPosition()]->GetHotels() < 1)
-				{
-					//check if player can afford to place a house
-					aBoard[aPlayers[position]->GetPosition()]->SetHouses(aPlayers, cGame, position, ioLog);
-				}
-				//else if no of houses is equal to 4
-				else if (aBoard[aPlayers[position]->GetPosition()]->GetHouses() >= 4)
-				{
-					//check if player can afford to place a hotel down
-					aBoard[aPlayers[position]->GetPosition()]->SetHotels(aPlayers, cGame, position, ioLog);
-				}
-				//else if a hotel is already on the property
-				else if (aBoard[aPlayers[position]->GetPosition()]->GetHotels() >= 1)
-				{
-					ioLog->writeToFile("[ Notice ]: Maximum buildings placed on property");
-				}
-				else
-				{
-
-				}				
+				//for loop to find how many are owned by player who owns the tile
+					for (auto const& it : aBoard)
+					{
+						//if the group is the same as the tile landed on
+						//AND owned by the same player
+						if (it->GetGroup() == aBoard[aPlayers[position]->GetPosition()]->GetGroup() && it->GetOwner() == aBoard[aPlayers[position]->GetPosition()]->GetOwner())
+						{
+							++* pGroupOwned;
+						}
+						//if type = utility and owner of that tile also owns this tile
+					}
+					aBoard[aPlayers[position]->GetPosition()]->PayRent(cGame, aPlayers, position, ioLog);
 			}
 		}
 		break;
@@ -934,18 +932,19 @@ void playerTurn(unique_ptr<CGame>& cGame, vector<CTile*>& aBoard, vector<CPlayer
 				{
 					ioLog->writeToFile("[ No Cash ]: To Mortgage properties");
 
-					for (auto const& it : aBoard)
+					for (int it = 0; it < aBoard.size() - 1; it++)
 					{
-						//if owned by the player
-						if (aBoard[aPlayers[i]->GetPosition()]->GetOwner() == i)
+						cout << it;
+
+						if (aBoard[it]->IsOwnable() && aBoard[it]->GetOwner() == i)
 						{
+							ioLog->writeToFile("[ Mortgaged ]: " + aBoard[it]->GetName());
 							aBoard[i]->MortgageTile(cGame, aPlayers, i);//mortgage the property
 						}
 
 						//if player has more than 0, break
 						if (aPlayers[i]->GetMoney() > 0)
 						{
-							cout << "Properties recovered";
 							break;
 						}
 					}

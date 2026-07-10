@@ -198,10 +198,8 @@ bool CProperty::isMortgaged()
 //mortgages property
 void CProperty::MortgageTile(unique_ptr<CGame>& cGame, vector<CPlayer*>& aPlayers, int& position)
 {
-	//if not mortgaged, set to true
 		mMortgage = true;
 		aPlayers[position]->GiveMoney(mPrice / 2, cGame);
-
 }
 
 void CProperty::PayMortgageTile(unique_ptr<CGame>& cGame, vector<CPlayer*>& aPlayers, int& position, unique_ptr<Logger>& ioLog)

@@ -8,12 +8,15 @@ class CUtility :
     public CTile
 {
 protected:
+    bool mOwnable = true;
     int mOwner;
     int mPrice;
     bool mMortgage;
 public:
     CUtility(istream& file);
     ~CUtility();
+
+    bool IsOwnable() const override { return true; }
 
     void ResetTile();
     int GetOwner();

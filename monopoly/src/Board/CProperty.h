@@ -7,6 +7,7 @@ class CProperty :
     public CTile
 {
 private:
+    bool mOwnable = true;
     int mOwner;
     int mPrice;
     int mRent;
@@ -18,6 +19,8 @@ private:
 public:
     CProperty(istream& file);
     ~CProperty();
+
+    bool IsOwnable() const override { return true; }
 
     int GetOwner();
 

@@ -7,6 +7,7 @@ class CStation :
     public CTile
 {
 protected:
+    bool mOwnable = true;
     int mOwner;
     int mPrice;
     int mRent;
@@ -15,6 +16,7 @@ public:
     CStation(istream& file);
     ~CStation();
 
+    bool IsOwnable() const override { return true; }
     void BuyProperty(unique_ptr<CGame>& cGame, vector<CPlayer*>& aPlayers, int& position, unique_ptr<Logger>& ioLog);
     void PayFare(unique_ptr<CGame>& cGame, vector<CTile*>& aBoard, vector<CPlayer*>& aPlayers, int& position, unique_ptr<int>& pTypeOwned, unique_ptr<Logger>& ioLog);
     void MortgageTile(unique_ptr<CGame>& cGame, vector<CPlayer*>& aPlayers, int& position);
