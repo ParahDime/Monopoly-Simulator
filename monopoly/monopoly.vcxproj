@@ -169,7 +169,7 @@
     <ClInclude Include="src\CGame.h" />
     <ClInclude Include="src\CPlayer.h" />
     <ClInclude Include="src\Header.h" />
-    <ClInclude Include="src\Personality.h" />
+    <ClInclude Include="src\CPersonality.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Logger.cpp" />
@@ -197,7 +197,7 @@
     <ClCompile Include="src\Card\CCardSort.cpp" />
     <ClCompile Include="src\CGame.cpp" />
     <ClCompile Include="src\CPlayer.cpp" />
-    <ClCompile Include="src\Personality.cpp" />
+    <ClCompile Include="src\CPersonality.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="..\todo.txt" />

@@ -19,16 +19,6 @@ CGame::~CGame()
 {
 }
 
-int CGame::GetMaxRound()
-{
-    return mMaxRound;
-}
-
-int CGame::GetCurrentRound()
-{
-    return mCurrentRound;
-}
-
 void CGame::SetMaxRound(int round)
 {
     mMaxRound = round;
@@ -63,6 +53,10 @@ string CGame::GetDifficulty()
     case 3:
         return "hard";
         break;
+
+    default:
+        return "normal";
+        break;
     }
 }
 
@@ -89,12 +83,10 @@ int CGame::GetPlayerMoney()
     case 3:
         return 1000;
         break;
+    default:
+        return 1500;
+        break;
     }
-}
-
-int CGame::GetPlayers()
-{
-    return mPlayers;
 }
 
 void CGame::SetDiceNo(int diceNo)
@@ -120,18 +112,9 @@ int CGame::rollDice()
     return num;
 }
 
-int CGame::GetDiceNo()
-{
-    return mDiceNo;
-}
-
 void CGame::MaxTileCount()
 {
     mMaxTiles++;
-}
-int CGame::GetHighRoll()
-{
-    return mHigh;
 }
 
 void CGame::SetHighRoll(int diceFace)
@@ -178,7 +161,7 @@ int CGame::GetGoMoney()
 
 void CGame::SetGoMoney(int money)
 {
-    money = mGoMoney;
+    mGoMoney = money;
 }
 
 int CGame::GetMultiplier()
@@ -200,12 +183,6 @@ int CGame::GetMultiplier()
     return 0;
 }
 
-//returns if user is player1
-bool CGame::isPlaying()
-{
-    return mPlaying;
-}
-
 //used to allow user to play
 void CGame::setPlaying(bool playing)
 {
@@ -217,16 +194,6 @@ void CGame::SetParkingRule(bool parking)
     mParking = parking;
 }
 
-bool CGame::GetParkingRule()
-{
-    return mParking;
-}
-
-int CGame::GetParkingMoney()
-{
-    return mParkingAmount;
-}
-
 void CGame::SetParkingMoney(int money)
 {
     mParkingAmount += money;
@@ -235,11 +202,6 @@ void CGame::SetParkingMoney(int money)
 void CGame::ResetParking()
 {
     mParkingAmount = 0;
-}
-
-bool CGame::GetHouseRules()
-{
-    return mHouseRules;
 }
 
 void CGame::SetHouseRules()

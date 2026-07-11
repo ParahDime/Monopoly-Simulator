@@ -7,7 +7,7 @@
 #include "src/Card/CCard.h"
 #include "src/Logger.h"
 
-void Test()
+static void Test()
 {
 	cout << "Function called\n";
 }
@@ -15,7 +15,7 @@ void Test()
 
 
 //returns an int between the range high and low
-int ReturnInt(int low, int high)
+static int ReturnInt(int low, int high)
 {
 	unique_ptr<int> getInt = make_unique<int>();
 	unique_ptr<string> convertString = make_unique<string>();
@@ -31,7 +31,7 @@ int ReturnInt(int low, int high)
 
 
 //returns either a y or n
-char ReturnChar()
+static char ReturnChar()
 {
 	unique_ptr<char> getChar = make_unique<char>();
 
@@ -41,8 +41,7 @@ char ReturnChar()
 
 	return *getChar;
 }
-
-bool SetHouseCustom(unique_ptr<CGame>& cGame)
+static bool SetHouseCustom(unique_ptr<CGame>& cGame)
 {
 	//open file
 	unique_ptr<string> fileName = make_unique<string>("src/houserules.json");
@@ -74,7 +73,7 @@ bool SetHouseCustom(unique_ptr<CGame>& cGame)
 
 //check if user is happy with the customisation options
 //bool used to show it changes are still needed (then set to true)
-bool VerifyCustomisation(unique_ptr<CGame>& cGame, unique_ptr<Logger>& ioLog)
+static bool VerifyCustomisation(unique_ptr<CGame>& cGame, unique_ptr<Logger>& ioLog)
 {
 	system("cls");
 	ioLog->writeToFile("=====================================================================");
@@ -111,7 +110,7 @@ bool VerifyCustomisation(unique_ptr<CGame>& cGame, unique_ptr<Logger>& ioLog)
 
 
 //use options to check what to change
-void CreateCustomisation(unique_ptr<CGame>& cGame, unique_ptr<Logger>& ioLog)
+static void CreateCustomisation(unique_ptr<CGame>& cGame, unique_ptr<Logger>& ioLog)
 {
 	cout << "Use custom house rules?\n(This is custom ruleset, select to manually customise) y/n";
 	if (ReturnChar() == 'y')
@@ -236,7 +235,7 @@ void CreateCustomisation(unique_ptr<CGame>& cGame, unique_ptr<Logger>& ioLog)
 }
 
 //check whether customisation occurs
-bool CheckCustomisation()
+static bool CheckCustomisation()
 {
 	unique_ptr<bool> checkCustom = make_unique<bool>();
 
@@ -256,7 +255,7 @@ bool CheckCustomisation()
 
 
 //rolls a random number
-int RNG(int low, int high)
+static int RNG(int low, int high)
 {
 	unique_ptr<int> num = make_unique<int>();
 
@@ -273,7 +272,7 @@ int RNG(int low, int high)
 	return *num;
 }
 
-string GetPositionSuffix(int rank)
+static string GetPositionSuffix(int rank)
 {
 	if (rank >= 11 && rank <= 13) {
 		return std::to_string(rank) + "th";
@@ -290,7 +289,7 @@ string GetPositionSuffix(int rank)
 }
 
 //output each player's total
-void OutputPlayers(unique_ptr<CGame>& cGame, vector<CPlayer*>& aPlayers, unique_ptr<Logger>& ioLog, bool gameEnd)
+static void OutputPlayers(unique_ptr<CGame>& cGame, vector<CPlayer*>& aPlayers, unique_ptr<Logger>& ioLog, bool gameEnd)
 {
 	unique_ptr<int> pPlayerNo = make_unique<int>(0);
 	std::sort(aPlayers.begin(), aPlayers.end(), [](const auto& a, const auto& b) {
@@ -330,14 +329,15 @@ void OutputPlayers(unique_ptr<CGame>& cGame, vector<CPlayer*>& aPlayers, unique_
 
 
 //shows which player has won
-void GameEnd(unique_ptr<CGame>& cGame, vector<CPlayer*>& aPlayers, unique_ptr<Logger>& ioLog)
+static void GameEnd(unique_ptr<CGame>& cGame, vector<CPlayer*>& aPlayers, unique_ptr<Logger>& ioLog)
 {
 	//for loop
 	std::sort(aPlayers.begin(), aPlayers.end());
 
 	OutputPlayers(cGame, aPlayers, ioLog, true);
 	
-	cout << "Would you like to print game results?\n y / n\n";
+	//no longer used, to update/remove
+	/*cout << "Would you like to print game results?\n y / n\n";
 
 	if (ReturnChar() == 'y')
 	{
@@ -369,7 +369,7 @@ void GameEnd(unique_ptr<CGame>& cGame, vector<CPlayer*>& aPlayers, unique_ptr<Lo
 	else {
 		cout << "Game results will not be saved \n";
 		return;
-	}
+	}*/
 
 	return;
 
@@ -377,7 +377,7 @@ void GameEnd(unique_ptr<CGame>& cGame, vector<CPlayer*>& aPlayers, unique_ptr<Lo
 
 
 //calculates and deals with build repair cards
-void BuildRepairs(vector<CPlayer*>& aPlayers, vector<CCard*>& aCards, vector<CTile*>& aBoard, unique_ptr<CGame>& cGame, 
+static void BuildRepairs(vector<CPlayer*>& aPlayers, vector<CCard*>& aCards, vector<CTile*>& aBoard, unique_ptr<CGame>& cGame, 
 	unique_ptr<int>& pCard, int position, unique_ptr<Logger>& ioLog)
 {
 	int* pHouses = new int;
@@ -428,7 +428,7 @@ void BuildRepairs(vector<CPlayer*>& aPlayers, vector<CCard*>& aCards, vector<CTi
 }
 
 //moves the player based on the card
-void MoveResolve(vector<CCard*>& aCards, vector<CPlayer*>& aPlayers, vector<CTile*>& aBoard, unique_ptr<CGame>& cGame,
+static void MoveResolve(vector<CCard*>& aCards, vector<CPlayer*>& aPlayers, vector<CTile*>& aBoard, unique_ptr<CGame>& cGame,
 	unique_ptr<int>& pCard, int position, unique_ptr<Logger>& ioLog)
 {
 
@@ -483,7 +483,7 @@ void MoveResolve(vector<CCard*>& aCards, vector<CPlayer*>& aPlayers, vector<CTil
 
 
 //resolves a chance or community chest card
-void ResolveCard(vector<CCard*>& aCards, vector<CPlayer*>& aPlayers, vector<CTile*>& aBoard, unique_ptr<CGame>& cGame, int position, unique_ptr<Logger>& ioLog)
+static void ResolveCard(vector<CCard*>& aCards, vector<CPlayer*>& aPlayers, vector<CTile*>& aBoard, unique_ptr<CGame>& cGame, int position, unique_ptr<Logger>& ioLog)
 {
 
 	unique_ptr<int> pCard = make_unique<int>();
@@ -558,7 +558,7 @@ void ResolveCard(vector<CCard*>& aCards, vector<CPlayer*>& aPlayers, vector<CTil
 
 
 //handles where the player lands on the board
-void playerLanding(unique_ptr<CGame>& cGame, vector<CTile*>& aBoard, vector<CPlayer*>& aPlayers, int position, unique_ptr<int>& pDieRoll,
+static void playerLanding(unique_ptr<CGame>& cGame, vector<CTile*>& aBoard, vector<CPlayer*>& aPlayers, int position, unique_ptr<int>& pDieRoll,
 	vector<CCard*>& aChance, vector<CCard*>& aCommunityChest, unique_ptr<Logger>& ioLog)
 {
 	//player lands on X square
@@ -778,7 +778,7 @@ void playerLanding(unique_ptr<CGame>& cGame, vector<CTile*>& aBoard, vector<CPla
 
 
 //player moves
-void playerTurn(unique_ptr<CGame>& cGame, vector<CTile*>& aBoard, vector<CPlayer*>& aPlayers, vector<CCard*>& aChance, vector<CCard*>& aCommunityChest, unique_ptr<Logger>& ioLog, unique_ptr<int>& bankruptCount)
+static void playerTurn(unique_ptr<CGame>& cGame, vector<CTile*>& aBoard, vector<CPlayer*>& aPlayers, vector<CCard*>& aChance, vector<CCard*>& aCommunityChest, unique_ptr<Logger>& ioLog, unique_ptr<int>& bankruptCount)
 {
 	//holds the dice number
 	unique_ptr<int> pDieRoll = make_unique<int>(0);
@@ -993,7 +993,7 @@ void playerTurn(unique_ptr<CGame>& cGame, vector<CTile*>& aBoard, vector<CPlayer
 
 
 //picks the players name
-void playerName(vector<string>& aNames, CPlayer* pPlayer)
+static void playerName(vector<string>& aNames, CPlayer* pPlayer)
 {
 	unique_ptr<int> random = make_unique<int>();
 
@@ -1010,7 +1010,7 @@ void playerName(vector<string>& aNames, CPlayer* pPlayer)
 
 
 //input data for the tiles
-void InputTiles(ifstream& file, unique_ptr<CGame>& cGame, vector<CTile*>& aBoard)
+static void InputTiles(ifstream& file, unique_ptr<CGame>& cGame, vector<CTile*>& aBoard)
 {
 	unique_ptr <int> type = make_unique<int>(0); //0 used as placeholder
 
@@ -1028,7 +1028,7 @@ void InputTiles(ifstream& file, unique_ptr<CGame>& cGame, vector<CTile*>& aBoard
 	}
 }
 
-void InputCards(ifstream& file, vector<CCard*>& aCards)
+static void InputCards(ifstream& file, vector<CCard*>& aCards)
 {
 	//read in cards here
 
@@ -1046,7 +1046,7 @@ void InputCards(ifstream& file, vector<CCard*>& aCards)
 
 
 //reads the file and inputs the stirngs into a vector for picking names
-void ReadFile(istream& file, vector<string>& aNames)
+static void ReadFile(istream& file, vector<string>& aNames)
 {
 	unique_ptr<string> nameHolder = make_unique<string>();
 
@@ -1166,7 +1166,7 @@ int main()
 	}
 	tileFile.close();
 	cout << "\n";
-	 
+
 	try {
 		//pick usernames
 		for (int i = 0; i <= cGame->GetPlayers() - 1; i++)
@@ -1209,8 +1209,27 @@ int main()
 	GameEnd(cGame, aPlayers, ioLog);
 	//delete items here
 	
-	aBoard.clear();
+	for (CPlayer* player : aPlayers) {
+		delete player;
+	}
 	aPlayers.clear();
+
+	for (CTile* board : aBoard) {
+		delete board;
+	}
+	aBoard.clear();
+
+	aNames.clear();
+
+	for (CCard* card : aChanceCards) {
+		delete card;
+	}
+	aChanceCards.clear();
+
+	for (CCard* card : aCommunityChestCards) {
+		delete card;
+	}
+	aCommunityChestCards.clear();
 
 	ioLog->closeFile();
 

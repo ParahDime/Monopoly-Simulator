@@ -70,11 +70,6 @@ void CProperty::UpdateRent()
 	}
 }
 
-int CProperty::GetHouses()
-{
-	return mHouses;
-}
-
 void CProperty::SetHouses(vector<CPlayer*>& aPlayers, unique_ptr<CGame>& cGame, int& position, unique_ptr<Logger>& ioLog)
 {
 	//if no hotel and less houses than max
@@ -98,11 +93,6 @@ void CProperty::SetHouses(vector<CPlayer*>& aPlayers, unique_ptr<CGame>& cGame, 
 	{
 		SetHotels(aPlayers, cGame, position, ioLog); //pass it to hotels
 	}
-}
-
-int CProperty::GetHotels()
-{
-	return mHotel;
 }
 
 void CProperty::SetHotels(vector<CPlayer*>& aPlayers, unique_ptr<CGame>& cGame, int& position, unique_ptr<Logger>& ioLog)
@@ -188,11 +178,6 @@ void CProperty::PayRent(unique_ptr<CGame>& cGame, vector<CPlayer*>& aPlayers, in
 string CProperty::GetGroup()
 {
 	return mGroup;
-}
-
-bool CProperty::isMortgaged()
-{
-	return mMortgage;
 }
 
 //mortgages property

@@ -90,7 +90,7 @@
     <ClInclude Include="src\Logger.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Personality.h">
+    <ClInclude Include="src\CPersonality.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="json.hpp">
@@ -173,7 +173,7 @@
     <ClCompile Include="src\Logger.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Personality.cpp">
+    <ClCompile Include="src\CPersonality.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

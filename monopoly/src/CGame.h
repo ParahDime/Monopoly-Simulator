@@ -12,7 +12,7 @@ private:
 	int mDiceNo; //number of dice rolled
 	int mMultiplier; //difficulty used, higher the number, more difficult
 
-	int mMaxTiles; //the maximum amount of tiles that are on the board that can be bought
+	int mMaxTiles = 0; //the maximum amount of tiles that are on the board that can be bought
 	int mTileOwned; //the amount of tiles owned by players
 	bool mParking = false; //bool if money is given on free parking
 	int mParkingAmount = 0;
@@ -24,8 +24,8 @@ public:
 	CGame();
 	~CGame();
 
-	int GetCurrentRound();
-	int GetMaxRound();
+	int GetCurrentRound() const { return mCurrentRound; };
+	int GetMaxRound() const { return mMaxRound; };
 	void SetMaxRound(int round);
 
 	void NextRound();
@@ -35,15 +35,14 @@ public:
 	string GetDifficulty();
 	void SetDifficulty(int multiplier);
 
-	int GetPlayers();
+	int GetPlayers() const { return mPlayers; };
 	void SetPlayers(int players);
 	int GetPlayerMoney();
 
-	int GetLowRoll();
-	int GetHighRoll();
+	int GetHighRoll() const { return mHigh; };
 	void SetHighRoll(int diceFace);
 
-	int GetDiceNo();
+	int GetDiceNo() const { return mDiceNo; };
 	void SetDiceNo(int diceNo);
 
 	int rollDice(); //roll the dice, return number
@@ -57,17 +56,17 @@ public:
 
 	int GetMultiplier(); //requires 
 
-	bool isPlaying();
+	bool isPlaying() const { return mPlaying; };
 	void setPlaying(bool playing);
 
 	void SetParkingRule(bool parking);
-	bool GetParkingRule();
+	bool GetParkingRule() const { return mParking; };
 
-	int GetParkingMoney();
+	int GetParkingMoney() const { return mParkingAmount; };
 	void SetParkingMoney(int money);
 	void ResetParking();
 
-	bool GetHouseRules();
+	bool GetHouseRules() const { return mHouseRules; };
 	void SetHouseRules();
 	
 };

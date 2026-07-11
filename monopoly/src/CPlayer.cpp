@@ -14,16 +14,6 @@ void CPlayer::SetName(string name)
 	mName = name;
 }
 
-string CPlayer::GetName()
-{
-	return mName;
-}
-
-int CPlayer::GetMoney()
-{
-	return mMoney;
-}
-
 void CPlayer::GetParkingMoney(int money) {
 	mMoney += money;
 }
@@ -46,11 +36,6 @@ void CPlayer::SetBankrupt()
 	mIsBankrupt = true;
 }
 
-bool CPlayer::IsBankrupt()
-{
-	return mIsBankrupt;
-}
-
 void CPlayer::changeJailCard()
 {
 	if (mJailCard == true)
@@ -63,20 +48,10 @@ void CPlayer::changeJailCard()
 	}
 }
 
-bool CPlayer::getJailCard()
-{
-	return mJailCard;
-}
-
 //moves the player forward
 void CPlayer::MovePosition(int num)
 {
 	mPosition += num;
-}
-
-int CPlayer::GetPosition()
-{
-	return mPosition;
 }
 
 void CPlayer::SetPosition(int position)
@@ -92,11 +67,6 @@ void CPlayer::BoardLap(int boardSize)
 void CPlayer::SetJailCounter(int counter)
 {
 	mJailCounter = counter;
-}
-
-int CPlayer::GetJailCounter()
-{
-	return mJailCounter;
 }
 
 void CPlayer::PassTurn()
