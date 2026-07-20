@@ -375,6 +375,22 @@ static void GameEnd(unique_ptr<CGame>& cGame, vector<CPlayer*>& aPlayers, unique
 
 }
 
+//remove bankrupt player from owning a property
+static void clearBankrupt(vector<CTile*>& aBoard, CPlayer* aPlayer, unique_ptr<CGame>& cGame)
+{
+	int tileNo;
+	//go through list
+	while (aPlayer->HasProperties())
+	{
+		//get last property tile pos
+		tileNo = aPlayer->GetProperty();
+		//go to board, clear owner
+		aBoard[tileNo]->ResetTile();
+		//pop item
+		aPlayer->RemoveProperty();
+	}
+}
+
 
 //calculates and deals with build repair cards
 static void BuildRepairs(vector<CPlayer*>& aPlayers, vector<CCard*>& aCards, vector<CTile*>& aBoard, unique_ptr<CGame>& cGame, 
@@ -401,11 +417,6 @@ static void BuildRepairs(vector<CPlayer*>& aPlayers, vector<CCard*>& aCards, vec
 			{
 				*pHouses += aBoard[i]->GetHouses();
 			}
-			else
-			{
-
-			}
-
 		}
 	}
 
@@ -586,7 +597,7 @@ static void playerLanding(unique_ptr<CGame>& cGame, vector<CTile*>& aBoard, vect
 				if (aPlayers[position]->GetMoney() >= aBoard[aPlayers[position]->GetPosition()]->GetPrice())
 				{
 					aBoard[aPlayers[position]->GetPosition()]->BuyProperty(cGame, aPlayers, position, ioLog);
-					//cout << aBoard[aPlayers[position]->GetPosition()]->GetOwner() << "number";
+					aPlayers[position]->AddProperty();
 				}
 				else {
 					cout << "Not enough money to buy the property\n";
@@ -675,7 +686,7 @@ static void playerLanding(unique_ptr<CGame>& cGame, vector<CTile*>& aBoard, vect
 			if (aBoard[aPlayers[position]->GetPosition()]->GetOwner() == -1) //if it has no owner of the tile
 			{
 				aBoard[aPlayers[position]->GetPosition()]->BuyProperty(cGame, aPlayers, position, ioLog);
-				//buy property
+				aPlayers[position]->AddProperty();
 			}
 			//if property is not owned by the player
 			else if (aBoard[aPlayers[position]->GetPosition()]->GetOwner() != position || aBoard[aPlayers[position]->GetPosition()]->GetOwner() != -1) 
@@ -702,6 +713,7 @@ static void playerLanding(unique_ptr<CGame>& cGame, vector<CTile*>& aBoard, vect
 			if (aBoard[aPlayers[position]->GetPosition()]->GetOwner() == -1)
 			{
 				aBoard[aPlayers[position]->GetPosition()]->BuyProperty(cGame, aPlayers, position, ioLog);//buy property
+				aPlayers[position]->AddProperty();
 			}
 			else if (aBoard[aPlayers[position]->GetPosition()]->GetOwner() != position || aBoard[aPlayers[position]->GetPosition()]->GetOwner() == -1)
 			{
@@ -786,12 +798,17 @@ static void playerTurn(unique_ptr<CGame>& cGame, vector<CTile*>& aBoard, vector<
 
 	for (int i = 0; i < cGame->GetPlayers(); i++)
 	{
+
 		if (!aPlayers[i]->IsBankrupt())
 		{
 			ioLog->writeToFile("===============");
 			ioLog->writeToFile(">>   " + aPlayers[i]->GetName() + "'s turn!");
 			ioLog->writeToFile("===============\n");
 
+			if (cGame->isPlaying() && i == 0)
+			{
+				cout << "Press [ Enter ] to roll the dice";
+			}
 			//roll dice
 			if (aPlayers[i]->GetJailCounter() == 0)
 			{
@@ -934,7 +951,6 @@ static void playerTurn(unique_ptr<CGame>& cGame, vector<CTile*>& aBoard, vector<
 
 					for (int it = 0; it < aBoard.size() - 1; it++)
 					{
-						cout << it;
 
 						if (aBoard[it]->IsOwnable() && aBoard[it]->GetOwner() == i)
 						{
@@ -955,27 +971,17 @@ static void playerTurn(unique_ptr<CGame>& cGame, vector<CTile*>& aBoard, vector<
 						ioLog->writeToFile("[ BANKRUPT ]: No money left after mortgaging properties\n");
 						(*bankruptCount)++;
 
-						//cycle through all tiles
-						for (int j = 0; j < aBoard.size() - 1; j++)
-						{
-							//if owner was player
-							if (aBoard[aPlayers[i]->GetPosition()]->GetOwner() == i)
-							{
-								aBoard[aPlayers[i]->GetPosition()]->ResetTile();
-							}
-						}
+						CPlayer* aPlayer = aPlayers[i];
+						clearBankrupt(aBoard, aPlayer, cGame);
+
 						//player is set to be bankrupt
 						aPlayers[i]->SetBankrupt();
 					}
-
 				}
 			}
-
 			string cash = "[ Cash ]:   ";
 			ioLog->writeToFile(cash + char(156) + to_string(aPlayers[i]->GetMoney()) + "\n\n");
 		}
-
-		
 	}
 	
 	//roll dice
@@ -1235,5 +1241,4 @@ int main()
 
 	_CrtDumpMemoryLeaks();
 	return 0;
-	
 }

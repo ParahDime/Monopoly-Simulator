@@ -14,6 +14,31 @@ void CPlayer::SetName(string name)
 	mName = name;
 }
 
+bool CPlayer::HasProperties() //check if any properties
+{
+	if (!ownedTiles.empty())
+	{
+		return true;
+	}
+	return false;
+}
+
+//get a specific property
+int CPlayer::GetProperty() //get last property in the vector
+{
+	return ownedTiles.back();
+}
+
+void CPlayer::AddProperty() //add property to vector
+{
+	ownedTiles.push_back(mPosition);
+}
+
+void CPlayer::RemoveProperty() //remove last property in vector
+{
+	ownedTiles.pop_back();
+}
+
 void CPlayer::GetParkingMoney(int money) {
 	mMoney += money;
 }

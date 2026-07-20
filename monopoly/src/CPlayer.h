@@ -8,11 +8,12 @@ class CPlayer
 private:
 	string mName;
 	int mMoney;
-	int mPosition;
+	int mPosition = 0;
 	int mJailCounter = 0;
 	bool mJailCard = false;
 	bool mIsBankrupt = false;
 	unique_ptr<IBoneBrain> mBrain; //struct to manage decision making
+	vector<int> ownedTiles;
 
 public:
 	CPlayer();
@@ -20,6 +21,11 @@ public:
 
 	void SetName(string name);
 	string GetName() const { return mName; };
+
+	bool HasProperties();
+	int GetProperty();
+	void AddProperty();
+	void RemoveProperty();
 
 	void GetParkingMoney(int money);
 	int GetMoney() const { return mMoney; };
