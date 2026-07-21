@@ -122,7 +122,7 @@ void CTile::UpdateRent()
 
 bool CTile::IsMortgaged()
 {
-	return bool();
+	return bool(false);
 }
 
 void CTile::MortgageTile(unique_ptr<CGame>& cGame, vector<CPlayer*>& aPlayers, int& position)

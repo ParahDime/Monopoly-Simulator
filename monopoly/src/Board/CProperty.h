@@ -42,7 +42,7 @@ public:
     void PayRent(unique_ptr<CGame>& cGame, vector<CPlayer*>& aPlayers, int position, unique_ptr<Logger>& ioLog);
     string GetGroup();
     friend istream& operator >> (istream& inputStream, CProperty& cProperty);
-    bool isMortgaged() const { return mMortgage; };
+    bool IsMortgaged() const { return mMortgage; };
     void MortgageTile(unique_ptr<CGame>& cGame, vector<CPlayer*>& aPlayers, int& position);
     void PayMortgageTile(unique_ptr<CGame>& cGame, vector<CPlayer*>& aPlayers, int& position, unique_ptr<Logger>& ioLog);
 };

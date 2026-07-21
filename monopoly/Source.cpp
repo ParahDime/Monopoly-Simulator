@@ -107,7 +107,107 @@ static bool VerifyCustomisation(unique_ptr<CGame>& cGame, unique_ptr<Logger>& io
 	}
 }
 
+//handles bankruptcy for player
+static void BankruptcyHandler()
+{
 
+}
+
+//validation for player
+static void playerChoice(unique_ptr<CGame>& cGame, vector<CTile*>& aBoard, int position, vector<CPlayer*>& aPlayers)
+{
+	bool choice = false; //checks if action is taken and successful
+	char choose = ' ';
+	int tileType = aBoard[position]->GetType();
+	while (!choice) {
+
+		//move tile=6 to resolvemove func/similar
+		//if tile is go to jail
+		if (tileType == 6 && aPlayers[position]->getJailCard() == true) {
+				cout << "Use get out of Jail card? y/n";
+				//return char
+
+				return;
+		}
+
+		cout << "Please select an option:\n\n";
+
+		if (tileType >= 1 || tileType <= 3)
+		{
+			cout << "[ Owner ] ";//owner (if any)
+			cout << "[ Mortgaged ]: " + to_string(choice);//if owned, mortgaged?
+			cout << "[ Houses ]: 1";// houses on property
+			cout << "[ Hotel ]: " + to_string(choice);// hotel?
+
+			if (aBoard[position]->GetOwner() == -1) { //no owner
+				cout << "[ 1 ]: Buy property\n";
+			}
+			if (aBoard[position]->GetOwner() == 0) { //owned by player
+				cout << "[ 2 ]: Buy house / hotel\n";
+			}
+			if (aBoard[position]->GetOwner() == 0 && !aBoard[position]->IsMortgaged()) //is mortgaged true
+			{
+				cout << "[ 2 ]: Mortgage Tile\n";
+			}
+			if (aBoard[position]->GetOwner() == 0 && aBoard[position]->IsMortgaged()) { //tile is mortgaged
+				cout << "[ 3 ]: Unmortgage tile\n";
+			}
+		}
+
+		cout << "[ 4 ]: Declare Bankruptcy\n";
+		cout << "[ 5 ]: Pass turn\n";
+
+		switch (position)
+		{
+		case 1:
+			
+			
+			//if item space is buyable, choose to buy property
+			// if not able to buy, look if auction rules are on
+				//if owned, put house
+			break;
+		case 2://unmortgage tile (if possible)
+			//check if tile owned AND unmortgaged
+			break;
+		case 3://unmortgage property
+			//check if tile owned AND mortgaged
+			break;
+		case 4://declare bankrupcy
+			cout << "Declaring bankruptcy will make your player forfeit.\nDeclare bankruptcy? y/n";
+			choose = ReturnChar();
+			if (choose == 'y') {
+				BankruptcyHandler();
+				aPlayers[position]->SetBankrupt();
+				choice = true;
+				cout << "Player was declared bankrupt. Press [ enter ] to continue";
+				cin;
+				return;
+			}
+			else {
+				cout << "Another action will be taken. Press [ enter ] to continue\n";
+				cin;
+			}
+			break;
+		case 5://do nothing
+			cout << "Do nothing? y/n";
+			choose = ReturnChar();
+			if (choose == 'y') {
+				cout << "No action was chosen on this tile\n Press [ enter ] to continue\n";
+				
+				cin;
+			}
+			else { //option n
+				cout << "Another action will be taken. Press [ enter ] to continue\n";
+				cin;
+			}
+			break;
+		default:
+			break;
+		}
+	}
+
+	return;
+}
 
 //use options to check what to change
 static void CreateCustomisation(unique_ptr<CGame>& cGame, unique_ptr<Logger>& ioLog)
@@ -583,8 +683,6 @@ static void playerLanding(unique_ptr<CGame>& cGame, vector<CTile*>& aBoard, vect
 		return;
 	}
 	
-
-	
 	//tiles[playerlist(player)->getTile->Get type of tile
 	switch (aBoard[aPlayers[position]->GetPosition()]->GetType())
 	{
@@ -717,13 +815,13 @@ static void playerLanding(unique_ptr<CGame>& cGame, vector<CTile*>& aBoard, vect
 			}
 			else if (aBoard[aPlayers[position]->GetPosition()]->GetOwner() != position || aBoard[aPlayers[position]->GetPosition()]->GetOwner() == -1)
 			{
-				unique_ptr<int> pStationOwned = make_unique<int>(0);
+				unique_ptr<int> pStationOwned = make_unique<int>(1);
 
 				//for loop to find how many are owned by player who owns the tile
 				for (auto const& it : aBoard)
 				{
 					//if type = utility and owner of that tile also owns this tile
-					if (it->GetType() == 2 && it->GetOwner() == aBoard[aPlayers[position]->GetPosition()]->GetOwner())
+					if (it->GetType() == 3 && it->GetOwner() == aBoard[aPlayers[position]->GetPosition()]->GetOwner())
 					{
 						++*pStationOwned;
 					}
@@ -925,18 +1023,9 @@ static void playerTurn(unique_ptr<CGame>& cGame, vector<CTile*>& aBoard, vector<
 					//player has lapped the board, and removes the board size from position counter
 					do {
 						aPlayers[i]->BoardLap(aBoard.size());
+						aPlayers[i]->GiveMoney(cGame->GetGoMoney(), cGame);
 					} while (aPlayers[i]->GetPosition() >= aBoard.size());
 
-					//if the first player laps the board
-					if (i == 0)
-					{
-						aPlayers[i]->GiveMoney(cGame->GetGoMoney(), cGame);
-					}
-					//else if other players lap the board
-					else
-					{
-						aPlayers[i]->GiveMoney(cGame->GetGoMoney(), cGame);
-					}
 					unique_ptr <string>LapBoard = make_unique<string>("[ Lapped Board ]:  Collected ");
 					ioLog->writeToFile(*LapBoard + char(156) + to_string(cGame->GetGoMoney()));
 				}
@@ -949,6 +1038,7 @@ static void playerTurn(unique_ptr<CGame>& cGame, vector<CTile*>& aBoard, vector<
 				{
 					ioLog->writeToFile("[ No Cash ]: To Mortgage properties");
 
+					//replace for loop with loop through vector
 					for (int it = 0; it < aBoard.size() - 1; it++)
 					{
 
@@ -959,9 +1049,15 @@ static void playerTurn(unique_ptr<CGame>& cGame, vector<CTile*>& aBoard, vector<
 						}
 
 						//if player has more than 0, break
-						if (aPlayers[i]->GetMoney() > 0)
+						if (aPlayers[i]->GetMoney() >= 0)
 						{
+							ioLog->writeToFile("[ Money Aquired ]: Properties mortgaged to pay outstanding payment\n");
 							break;
+						}
+
+						if (i == 0 && cGame->isPlaying())
+						{
+							cout << "Press any key to continue";
 						}
 					}
 

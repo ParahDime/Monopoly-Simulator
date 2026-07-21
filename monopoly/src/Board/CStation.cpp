@@ -4,7 +4,6 @@ CStation::CStation(istream& file) : CTile(file)
 {
 	file >> *this;
 	mOwner = -1;
-	mMortgage = false;
 }
 
 CStation::~CStation()
@@ -25,7 +24,7 @@ void CStation::PayFare(unique_ptr<CGame>& cGame, vector<CTile*>& aBoard, vector<
 {
 	//calculate total
 	unique_ptr<int> mTotalRent = make_unique<int>();
-	*mTotalRent = mRent * (2 * *pTypeOwned); //uses power of 2 to calculate amount of rent owned
+	*mTotalRent = mRent * (25 * *pTypeOwned); //uses power of 2 to calculate amount of rent owned
 
 	//difficulty multiplier
 	if (position == 0)
