@@ -71,6 +71,13 @@ static bool SetHouseCustom(unique_ptr<CGame>& cGame)
 	return true;
 }
 
+static void continuePlayer(string action)
+{
+	std::cout << "Press [ Enter ] " + action;
+	std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+	std: cin.get();
+}
+
 //check if user is happy with the customisation options
 //bool used to show it changes are still needed (then set to true)
 static bool VerifyCustomisation(unique_ptr<CGame>& cGame, unique_ptr<Logger>& ioLog)
@@ -107,107 +114,24 @@ static bool VerifyCustomisation(unique_ptr<CGame>& cGame, unique_ptr<Logger>& io
 	}
 }
 
-//handles bankruptcy for player
-static void BankruptcyHandler()
+
+//remove bankrupt player from owning a property
+static void clearBankrupt(vector<CTile*>& aBoard, CPlayer* aPlayer, unique_ptr<CGame>& cGame)
 {
-
-}
-
-//validation for player
-static void playerChoice(unique_ptr<CGame>& cGame, vector<CTile*>& aBoard, int position, vector<CPlayer*>& aPlayers)
-{
-	bool choice = false; //checks if action is taken and successful
-	char choose = ' ';
-	int tileType = aBoard[position]->GetType();
-	while (!choice) {
-
-		//move tile=6 to resolvemove func/similar
-		//if tile is go to jail
-		if (tileType == 6 && aPlayers[position]->getJailCard() == true) {
-				cout << "Use get out of Jail card? y/n";
-				//return char
-
-				return;
-		}
-
-		cout << "Please select an option:\n\n";
-
-		if (tileType >= 1 || tileType <= 3)
-		{
-			cout << "[ Owner ] ";//owner (if any)
-			cout << "[ Mortgaged ]: " + to_string(choice);//if owned, mortgaged?
-			cout << "[ Houses ]: 1";// houses on property
-			cout << "[ Hotel ]: " + to_string(choice);// hotel?
-
-			if (aBoard[position]->GetOwner() == -1) { //no owner
-				cout << "[ 1 ]: Buy property\n";
-			}
-			if (aBoard[position]->GetOwner() == 0) { //owned by player
-				cout << "[ 2 ]: Buy house / hotel\n";
-			}
-			if (aBoard[position]->GetOwner() == 0 && !aBoard[position]->IsMortgaged()) //is mortgaged true
-			{
-				cout << "[ 2 ]: Mortgage Tile\n";
-			}
-			if (aBoard[position]->GetOwner() == 0 && aBoard[position]->IsMortgaged()) { //tile is mortgaged
-				cout << "[ 3 ]: Unmortgage tile\n";
-			}
-		}
-
-		cout << "[ 4 ]: Declare Bankruptcy\n";
-		cout << "[ 5 ]: Pass turn\n";
-
-		switch (position)
-		{
-		case 1:
-			
-			
-			//if item space is buyable, choose to buy property
-			// if not able to buy, look if auction rules are on
-				//if owned, put house
-			break;
-		case 2://unmortgage tile (if possible)
-			//check if tile owned AND unmortgaged
-			break;
-		case 3://unmortgage property
-			//check if tile owned AND mortgaged
-			break;
-		case 4://declare bankrupcy
-			cout << "Declaring bankruptcy will make your player forfeit.\nDeclare bankruptcy? y/n";
-			choose = ReturnChar();
-			if (choose == 'y') {
-				BankruptcyHandler();
-				aPlayers[position]->SetBankrupt();
-				choice = true;
-				cout << "Player was declared bankrupt. Press [ enter ] to continue";
-				cin;
-				return;
-			}
-			else {
-				cout << "Another action will be taken. Press [ enter ] to continue\n";
-				cin;
-			}
-			break;
-		case 5://do nothing
-			cout << "Do nothing? y/n";
-			choose = ReturnChar();
-			if (choose == 'y') {
-				cout << "No action was chosen on this tile\n Press [ enter ] to continue\n";
-				
-				cin;
-			}
-			else { //option n
-				cout << "Another action will be taken. Press [ enter ] to continue\n";
-				cin;
-			}
-			break;
-		default:
-			break;
-		}
+	int tileNo;
+	//go through list
+	while (aPlayer->HasProperties())
+	{
+		//get last property tile pos
+		tileNo = aPlayer->GetProperty();
+		//go to board, clear owner
+		aBoard[tileNo]->ResetTile();
+		//pop item
+		aPlayer->RemoveProperty();
 	}
-
-	return;
 }
+
+
 
 //use options to check what to change
 static void CreateCustomisation(unique_ptr<CGame>& cGame, unique_ptr<Logger>& ioLog)
@@ -435,61 +359,10 @@ static void GameEnd(unique_ptr<CGame>& cGame, vector<CPlayer*>& aPlayers, unique
 	std::sort(aPlayers.begin(), aPlayers.end());
 
 	OutputPlayers(cGame, aPlayers, ioLog, true);
-	
-	//no longer used, to update/remove
-	/*cout << "Would you like to print game results?\n y / n\n";
-
-	if (ReturnChar() == 'y')
-	{
-		//open file
-		unique_ptr<string> fileName = make_unique<string>();
-		*fileName = "config/results.txt";
-		ofstream file(*fileName);
-
-		//dump stats into the file
-		//game information (customisation)
-		
-		file << "Rounds selected: " << cGame->GetMaxRound() << "\n";
-		file << "Rounds played: " << cGame->GetCurrentRound() << "\n";
-		file << "Difficulty selected: " << cGame->GetDifficulty() << "\n";
-		file << "Number of dice used: " << cGame->GetDiceNo() << "\n";
-		file << "Number of players: " << aPlayers.size() << "\n\n";
-
-		//stats for each player
-		for (int i = 0; i < aPlayers.size(); i++)
-		{
-			file << "Player " << i << ": " << aPlayers[i]->GetName() << "\n";
-			file << "Player money: " << char(156) << aPlayers[i]->GetMoney() << "\n\n";
-		}
-		//use function if possible
-
-		//close the file
-		file.close();
-	}
-	else {
-		cout << "Game results will not be saved \n";
-		return;
-	}*/
-
 	return;
 
 }
 
-//remove bankrupt player from owning a property
-static void clearBankrupt(vector<CTile*>& aBoard, CPlayer* aPlayer, unique_ptr<CGame>& cGame)
-{
-	int tileNo;
-	//go through list
-	while (aPlayer->HasProperties())
-	{
-		//get last property tile pos
-		tileNo = aPlayer->GetProperty();
-		//go to board, clear owner
-		aBoard[tileNo]->ResetTile();
-		//pop item
-		aPlayer->RemoveProperty();
-	}
-}
 
 
 //calculates and deals with build repair cards
@@ -668,6 +541,176 @@ static void ResolveCard(vector<CCard*>& aCards, vector<CPlayer*>& aPlayers, vect
 }
 
 
+
+//validation for player
+static void playerChoice(unique_ptr<CGame>& cGame, vector<CTile*>& aBoard, int position, vector<CPlayer*>& aPlayers, unique_ptr<Logger>& ioLog)
+{
+	bool choice = false; //checks if action is taken and successful
+	unique_ptr<int> choose = make_unique<int>(0);
+	int tileType = aBoard[position]->GetType();
+	char getChoice = ' ';
+	unique_ptr<int> place = make_unique<int>(aPlayers[position]->GetPosition());
+	while (!choice) {
+
+		//move tile=6 to resolvemove func/similar
+		//if tile is go to jail
+		if (tileType == 6 && aPlayers[position]->getJailCard()) {
+			cout << "Use get out of Jail card? y/n";
+			if (ReturnChar() == 'y')
+			{
+				aPlayers[position]->changeJailCard();
+				aPlayers[position]->SetJailCounter(0);
+			}
+			return;
+		}
+
+		cout << "\nPlease select an option:\n\n";
+
+		if (tileType >= 1 || tileType <= 3)
+		{
+			cout << "[ Owner ] " + aPlayers[aBoard[position]->GetOwner()]->GetName() + "\n";//owner (if any)
+			cout << "[ Mortgaged ]: " + string(aBoard[position]->IsMortgaged() ? "true" : "false") + "\n";//if owned, mortgaged
+			cout << "[ Houses ]:" + to_string(aBoard[position]->GetHouses()) + "\n";// houses on property
+			cout << "[ Hotels ]: " + to_string(aBoard[position]->GetHotels()) + "\n\n";// hotel
+
+			if (aBoard[*place]->GetOwner() == -1) { //no owner
+				cout << "[ 1 ]: Buy property\n";
+			}
+			if (aBoard[*place]->GetOwner() == 0 && tileType == 1 && aBoard[position]->GetHotels() > 1) { //owned by player
+				cout << "[ 1 ]: Buy house / hotel\n";
+			}
+			if (aBoard[*place]->GetOwner() == 0 && !aBoard[position]->IsMortgaged()) //is mortgaged true
+			{
+				cout << "[ 2 ]: Mortgage Tile\n";
+			}
+			if (aBoard[*place]->GetOwner() == 0 && aBoard[position]->IsMortgaged()) { //tile is mortgaged
+				cout << "[ 3 ]: Unmortgage tile\n";
+			}
+		}
+
+		cout << "[ 4 ]: Declare Bankruptcy\n";
+		cout << "[ 5 ]: Pass turn\n";
+
+		while (*choose < 1 || *choose > 5) //EDIT: add way to check if ones outputted
+		{
+			*choose = ReturnInt(1, 5);
+		}
+		switch (position)
+		{
+		case 1:
+			//determine if owned
+			if (aBoard[aPlayers[position]->GetPosition()]->GetOwner() == 0) //buy the tile
+			{
+				cout << "Buy the tile? y/n";
+				if (ReturnChar() == 'y')
+				{
+					aBoard[position]->BuyProperty(cGame, aPlayers, position, ioLog);
+				}
+				else {
+
+				}
+			}
+			else { //buy houses/hotel
+				if (aBoard[aPlayers[position]->GetPosition()]->GetHouses() < 4) //houses less than 4
+				{
+					cout << "[ Cost ] : " + to_string(aBoard[position]->GetHousePrice());
+					cout << "Add a house? y/n";
+					//get cost
+					if (ReturnChar() == 'y')
+					{
+						if(aPlayers[0]->GetMoney() > aBoard[position]->GetHousePrice()) //can afford
+						aBoard[position]->SetHouses(aPlayers, cGame, position, ioLog);
+						else
+						{
+							cout << "Cannot afford to add a house";
+							continuePlayer("to continue");
+						}
+					}
+					else
+					{
+						cout << "House was not bought";
+					}
+				}
+				else
+				{
+					cout << "[ Cost ] : " + to_string(aBoard[position]->GetHotelPrice());
+					cout << "Add a hotel? y/n";
+					//get cost
+					if (ReturnChar() == 'y')
+					{
+						if (aPlayers[0]->GetMoney() > aBoard[position]->GetHotelPrice()) //can afford
+							aBoard[position]->SetHotels(aPlayers, cGame, position, ioLog);
+						else
+						{
+							cout << "Cannot afford to add a hotel";
+							continuePlayer("to continue");
+						}
+					}
+					else
+					{
+						cout << "Hotel was not bought";
+					}
+				}
+			}
+			break;
+		case 2://mortgage tile (if possible)
+			aBoard[position]->MortgageTile(cGame, aPlayers, position, ioLog, aBoard);
+			break;
+		case 3://unmortgage property
+			//when player can unmortgage, proceed
+			if ((aPlayers[0]->GetMoney() - (aBoard[position]->GetPrice() * 1.1)) > 0) {
+				aBoard[position]->PayMortgageTile(cGame, aPlayers, position, ioLog);
+			}
+			else { //if not able to afford
+				cout << "Unable to unmortgage the property";
+				continuePlayer("to continue");
+			}
+			break;
+		case 4://declare bankrupcy
+			cout << "Declaring bankruptcy will make your player forfeit.\nDeclare bankruptcy? y/n";
+			getChoice = ReturnChar();
+			if (getChoice == 'y') {
+				clearBankrupt(aBoard, aPlayers[position], cGame);
+				aPlayers[position]->SetBankrupt();
+				getChoice = true;
+				cout << "Player was declared bankrupt. Press [ enter ] to continue";
+				cin;
+				return;
+			}
+			else {
+				cout << "Another action will be taken. Press [ enter ] to continue\n";
+				cin;
+				system("cls");
+				playerChoice(cGame, aBoard, position, aPlayers, ioLog);
+				return;
+			}
+			break;
+		case 5://do nothing
+			cout << "Do nothing? y/n";
+			getChoice = ReturnChar();
+			if (getChoice == 'y') {
+				cout << "No action was chosen on this tile\n Press [ enter ] to continue\n";
+
+				cin;
+			}
+			else { //option n
+				cout << "Another action will be taken. Press [ enter ] to continue\n";
+				cin;
+				system("cls");
+				playerChoice(cGame, aBoard, position, aPlayers, ioLog);
+				return;
+			}
+			break;
+		default:
+			break;
+		}
+	}
+
+	return;
+}
+
+
+
 //handles where the player lands on the board
 static void playerLanding(unique_ptr<CGame>& cGame, vector<CTile*>& aBoard, vector<CPlayer*>& aPlayers, int position, unique_ptr<int>& pDieRoll,
 	vector<CCard*>& aChance, vector<CCard*>& aCommunityChest, unique_ptr<Logger>& ioLog)
@@ -682,16 +725,20 @@ static void playerLanding(unique_ptr<CGame>& cGame, vector<CTile*>& aBoard, vect
 		ioLog->writeToFile("[ In Jail ]: ");
 		return;
 	}
-	
+
 	//tiles[playerlist(player)->getTile->Get type of tile
 	switch (aBoard[aPlayers[position]->GetPosition()]->GetType())
 	{
-		case 1:
-			//player lands on a property tile
-
-			//if it has no owner of the tile
-			if (aBoard[aPlayers[position]->GetPosition()]->GetOwner() == -1) 
+		case 1: //player lands on a property tile
+			if (cGame->isPlaying() && position == 0) //person is playing
 			{
+				playerChoice(cGame, aBoard, position, aPlayers, ioLog);
+				break;
+			}
+			//if it has no owner of the tile
+			else if (aBoard[aPlayers[position]->GetPosition()]->GetOwner() == -1) 
+			{
+
 				if (aPlayers[position]->GetMoney() >= aBoard[aPlayers[position]->GetPosition()]->GetPrice())
 				{
 					aBoard[aPlayers[position]->GetPosition()]->BuyProperty(cGame, aPlayers, position, ioLog);
@@ -700,6 +747,7 @@ static void playerLanding(unique_ptr<CGame>& cGame, vector<CTile*>& aBoard, vect
 				else {
 					cout << "Not enough money to buy the property\n";
 				}
+				break;
 			}
 			//else if it is owned by the player
 			else if (aBoard[aPlayers[position]->GetPosition()]->GetOwner() == position)
@@ -758,36 +806,41 @@ static void playerLanding(unique_ptr<CGame>& cGame, vector<CTile*>& aBoard, vect
 
 					}
 				}
+				break;
+			}
 			//if property is not owned by the player
-			else if (aBoard[aPlayers[position]->GetPosition()]->GetOwner() != position || aBoard[aPlayers[position]->GetPosition()]->GetOwner() != -1)
+			if (aBoard[aPlayers[position]->GetPosition()]->GetOwner() != position || aBoard[aPlayers[position]->GetPosition()]->GetOwner() != -1)
 			{
 				//counts the number of properties in the same group
 				unique_ptr<int> pGroupOwned = make_unique<int>(0);
 
 				//for loop to find how many are owned by player who owns the tile
-					for (auto const& it : aBoard)
+				for (auto const& it : aBoard)
+				{
+					//if the group is the same as the tile landed on
+					//AND owned by the same player
+					if (it->GetGroup() == aBoard[aPlayers[position]->GetPosition()]->GetGroup() && it->GetOwner() == aBoard[aPlayers[position]->GetPosition()]->GetOwner())
 					{
-						//if the group is the same as the tile landed on
-						//AND owned by the same player
-						if (it->GetGroup() == aBoard[aPlayers[position]->GetPosition()]->GetGroup() && it->GetOwner() == aBoard[aPlayers[position]->GetPosition()]->GetOwner())
-						{
-							++* pGroupOwned;
-						}
-						//if type = utility and owner of that tile also owns this tile
+						++*pGroupOwned;
 					}
-					aBoard[aPlayers[position]->GetPosition()]->PayRent(cGame, aPlayers, position, ioLog);
+					//if type = utility and owner of that tile also owns this tile
+				}
+				aBoard[aPlayers[position]->GetPosition()]->PayRent(cGame, aPlayers, position, ioLog);
 			}
-		}
 		break;
-		case 2:
-			//player lands on utility
-			if (aBoard[aPlayers[position]->GetPosition()]->GetOwner() == -1) //if it has no owner of the tile
+		case 2: //player lands on utility
+			//if property is not owned by the player
+			if (cGame->isPlaying() && position == 0) //person is playing
+			{
+				playerChoice(cGame, aBoard, position, aPlayers, ioLog);
+				break;
+			}
+			else if (aBoard[aPlayers[position]->GetPosition()]->GetOwner() == -1) //if it has no owner of the tile
 			{
 				aBoard[aPlayers[position]->GetPosition()]->BuyProperty(cGame, aPlayers, position, ioLog);
 				aPlayers[position]->AddProperty();
 			}
-			//if property is not owned by the player
-			else if (aBoard[aPlayers[position]->GetPosition()]->GetOwner() != position || aBoard[aPlayers[position]->GetPosition()]->GetOwner() != -1) 
+			else if (aBoard[aPlayers[position]->GetPosition()]->GetOwner() != position || aBoard[aPlayers[position]->GetPosition()]->GetOwner() != -1)
 			{
 				unique_ptr<int> pUtilityOwned = make_unique<int>(0);
 
@@ -803,12 +856,15 @@ static void playerLanding(unique_ptr<CGame>& cGame, vector<CTile*>& aBoard, vect
 
 				aBoard[aPlayers[position]->GetPosition()]->PayBill(cGame, aBoard, aPlayers, position, pDieRoll, pUtilityOwned, ioLog);
 			}
-			//else if not enough money to pay OR owned by the player
-
 			break;
-		case 3:
+		case 3: //stations
+			if (cGame->isPlaying() && position == 0) //person is playing
+			{
+				playerChoice(cGame, aBoard, position, aPlayers, ioLog);
+				break;
+			}
 			//player lands on a station tile
-			if (aBoard[aPlayers[position]->GetPosition()]->GetOwner() == -1)
+			else if (aBoard[aPlayers[position]->GetPosition()]->GetOwner() == -1)
 			{
 				aBoard[aPlayers[position]->GetPosition()]->BuyProperty(cGame, aPlayers, position, ioLog);//buy property
 				aPlayers[position]->AddProperty();
@@ -829,6 +885,7 @@ static void playerLanding(unique_ptr<CGame>& cGame, vector<CTile*>& aBoard, vect
 
 				aBoard[aPlayers[position]->GetPosition()]->PayFare(cGame, aBoard, aPlayers, position, pStationOwned, ioLog);//pay rent
 			}
+			
 			break;
 		case 4:
 			//player lands on a go tile
@@ -905,7 +962,7 @@ static void playerTurn(unique_ptr<CGame>& cGame, vector<CTile*>& aBoard, vector<
 
 			if (cGame->isPlaying() && i == 0)
 			{
-				cout << "Press [ Enter ] to roll the dice";
+				continuePlayer("to roll the dice\n");
 			}
 			//roll dice
 			if (aPlayers[i]->GetJailCounter() == 0)
@@ -1299,7 +1356,7 @@ int main()
 	while (cGame->GetMaxRound() > cGame->GetCurrentRound() && *bankruptCount <= (aPlayers.size() - 2))
 	{
 		ioLog->writeToFile("=====================================================================");
-		ioLog->writeToFile("				Round " + std::to_string((cGame->GetCurrentRound() + 1)));
+		ioLog->writeToFile("				Round " + std::to_string((cGame->GetCurrentRound())));
 		ioLog->writeToFile("=====================================================================\n");
 
 		playerTurn(cGame, aBoard, aPlayers, aChanceCards, aCommunityChestCards, ioLog, bankruptCount);

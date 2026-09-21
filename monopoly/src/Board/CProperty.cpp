@@ -202,7 +202,7 @@ void CProperty::PayMortgageTile(unique_ptr<CGame>& cGame, vector<CPlayer*>& aPla
 	//unmortgage the property
 	mMortgage = false;
 	aPlayers[position]->TakeMoney(mPrice * 1.1, cGame);
-	ioLog->writeToFile("[ Mortgage Paid ]");
+	ioLog->writeToFile("[ Mortgage Paid ]" + mName + "\n");
 }
 
 istream& operator>>(istream& inputStream, CProperty& cProperty)

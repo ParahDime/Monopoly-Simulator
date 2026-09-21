@@ -36,6 +36,10 @@ public:
 	virtual void SetHouses(vector<CPlayer*>& aPlayers, unique_ptr<CGame>& cGame, int& position, unique_ptr<Logger>& ioLog);
 	virtual int GetHotels();
 	virtual void SetHotels(vector<CPlayer*>& aPlayers, unique_ptr<CGame>& cGame, int& position, unique_ptr<Logger>& ioLog);
+	virtual int GetHousePrice();
+	virtual int GetHotelPrice();
+
+
 
 	virtual void UpdateRent();
 	virtual bool IsMortgaged();

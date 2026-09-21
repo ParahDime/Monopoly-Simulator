@@ -7,7 +7,7 @@ class CPlayer
 {
 private:
 	string mName;
-	int mMoney;
+	int mMoney = 0;
 	int mPosition = 0;
 	int mJailCounter = 0;
 	bool mJailCard = false;

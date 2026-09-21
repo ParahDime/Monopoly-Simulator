@@ -36,6 +36,10 @@ public:
     int GetHotels() const { return mHotel; };
     void SetHotels(vector<CPlayer*>& aPlayers, unique_ptr<CGame>& cGame, int& position, unique_ptr<Logger>& ioLog);
 
+    int GetHotelPrice() const { return mPrice * 0.5; };
+    int GetHousePrice() const { return mPrice * 0.2; };
+
+
     void ResetTile();
 
     void BuyProperty(unique_ptr<CGame>& cGame, vector<CPlayer*>& aPlayers, int& position, unique_ptr<Logger>& ioLog);

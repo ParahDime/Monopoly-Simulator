@@ -116,6 +116,16 @@ void CTile::SetHotels(vector<CPlayer*>& aPlayers, unique_ptr<CGame>& cGame, int&
 {
 }
 
+int CTile::GetHousePrice()
+{
+	return 0;
+}
+
+int CTile::GetHotelPrice()
+{
+	return 0;
+}
+
 void CTile::UpdateRent()
 {
 }

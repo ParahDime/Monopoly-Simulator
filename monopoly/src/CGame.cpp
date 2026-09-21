@@ -4,7 +4,7 @@ CGame::CGame()
 {
     mBank = 40000;
     mHigh = 6;
-    mCurrentRound = 0;
+    mCurrentRound = 1;
     mTileOwned = 0;
     mMaxRound = 50;
     mPlayers = 4; //no of players
