@@ -34,7 +34,7 @@ void CGame::SetDifficulty(int multiplier)
     {
         mBank = 30000;
     }
-    else if (mMultiplier == 1) //if easy mode
+    else if (mMultiplier <= 1) //if easy mode
     {
         mBank = 50000;
     }

@@ -23,11 +23,12 @@ void CStation::BuyProperty(unique_ptr<CGame>& cGame, vector<CPlayer*>& aPlayers,
 void CStation::PayFare(unique_ptr<CGame>& cGame, vector<CTile*>& aBoard, vector<CPlayer*>& aPlayers, int& position, unique_ptr<int>& pTypeOwned, unique_ptr<Logger>& ioLog)
 {
 	//calculate total
-	unique_ptr<int> mTotalRent = make_unique<int>();
-	*mTotalRent = mRent * (25 * *pTypeOwned); //uses power of 2 to calculate amount of rent owned
+	unique_ptr<int> mTotalRent = make_unique<int>();  
+	int multiplier = 1 << (*pTypeOwned - 1);
+	*mTotalRent = mRent * multiplier; //uses power of 2 to calculate amount of rent owned
 
-	//difficulty multiplier
-	if (position == 0)
+	//difficulty multiplier (2 is normal)
+	if (cGame->GetMultiplier() != 2)
 	{
 		*mTotalRent *= cGame->GetMultiplier();
 	}
