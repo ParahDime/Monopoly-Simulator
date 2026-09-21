@@ -39,7 +39,7 @@ public:
 
 	virtual void UpdateRent();
 	virtual bool IsMortgaged();
-	virtual void MortgageTile(unique_ptr<CGame>& cGame, vector<CPlayer*>& aPlayers, int& position);
+	virtual void MortgageTile(unique_ptr<CGame>& cGame, vector<CPlayer*>& aPlayers, int& position, unique_ptr<Logger>& ioLog, vector<CTile*>& aBoard);
 	virtual void PayMortgageTile(unique_ptr<CGame>& cGame, vector<CPlayer*>& aPlayers, int& position, unique_ptr<Logger>& ioLog);
 	virtual void PassingJail(vector<CPlayer*>& aPlayers, int position, unique_ptr<Logger>& ioLog); //jail ( 5
 

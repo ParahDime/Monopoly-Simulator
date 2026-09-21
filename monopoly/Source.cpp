@@ -1044,8 +1044,7 @@ static void playerTurn(unique_ptr<CGame>& cGame, vector<CTile*>& aBoard, vector<
 
 						if (aBoard[it]->IsOwnable() && aBoard[it]->GetOwner() == i)
 						{
-							ioLog->writeToFile("[ Mortgaged ]: " + aBoard[it]->GetName());
-							aBoard[i]->MortgageTile(cGame, aPlayers, i);//mortgage the property
+							aBoard[it]->MortgageTile(cGame, aPlayers, i, ioLog, aBoard);//mortgage the property
 						}
 
 						//if player has more than 0, break

@@ -43,7 +43,7 @@ public:
     string GetGroup();
     friend istream& operator >> (istream& inputStream, CProperty& cProperty);
     bool IsMortgaged() const { return mMortgage; };
-    void MortgageTile(unique_ptr<CGame>& cGame, vector<CPlayer*>& aPlayers, int& position);
+    void MortgageTile(unique_ptr<CGame>& cGame, vector<CPlayer*>& aPlayers, int& position, unique_ptr<Logger>& ioLog, vector<CTile*>& aBoard);
     void PayMortgageTile(unique_ptr<CGame>& cGame, vector<CPlayer*>& aPlayers, int& position, unique_ptr<Logger>& ioLog);
 };
 

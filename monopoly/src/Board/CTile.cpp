@@ -125,7 +125,7 @@ bool CTile::IsMortgaged()
 	return bool(false);
 }
 
-void CTile::MortgageTile(unique_ptr<CGame>& cGame, vector<CPlayer*>& aPlayers, int& position)
+void CTile::MortgageTile(unique_ptr<CGame>& cGame, vector<CPlayer*>& aPlayers, int& position, unique_ptr<Logger>& ioLog, vector<CTile*>& aBoard)
 {
 }
 

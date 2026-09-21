@@ -181,10 +181,20 @@ string CProperty::GetGroup()
 }
 
 //mortgages property
-void CProperty::MortgageTile(unique_ptr<CGame>& cGame, vector<CPlayer*>& aPlayers, int& position)
+void CProperty::MortgageTile(unique_ptr<CGame>& cGame, vector<CPlayer*>& aPlayers, int& position, unique_ptr<Logger>& ioLog, vector<CTile*>& aBoard)
 {
+	if (mMortgage == false)
+	{
 		mMortgage = true;
-		aPlayers[position]->GiveMoney(mPrice / 2, cGame);
+		int mortgageGain = (mPrice * 0.5) / 1.0;
+		aPlayers[position]->GiveMoney(mortgageGain, cGame);
+		ioLog->writeToFile("[ Mortgaged ]: " + mName + " for " + to_string(mortgageGain) + "\n");
+		//get half money from property
+	}
+	else
+	{
+		cout << "[ Already mortgaged ]: " + mName + "\n";
+	}
 }
 
 void CProperty::PayMortgageTile(unique_ptr<CGame>& cGame, vector<CPlayer*>& aPlayers, int& position, unique_ptr<Logger>& ioLog)
